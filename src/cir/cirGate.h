@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include "sat.h"
 
 using namespace std;
 
@@ -32,6 +32,8 @@ class Wire{
         int getdfsCheck(){ return _dfsCheck; }
         void setdfsCheck(int num){_dfsCheck = num;}
         string getId(){ return _id; }
+        Var getVar(){return _var;}
+        void setVar(Var v){_var = v;}
 	private:
 		Gate* _fin;
 		vector<Gate *> _fout;
@@ -40,6 +42,7 @@ class Wire{
         int _dfsCheck;
 		int _time;
 		string _id;
+        Var _var;
 };
 class Gate{
 	public:
