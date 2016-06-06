@@ -36,6 +36,15 @@ class SatSolver
       // Constructing proof model
       // Return the Var ID of the new Var
       inline Var newVar() { _solver->newVar(); return _curVar++; }
+      void addNotCNF(Var vf,Var vk){
+          vec<Lit> lits;
+          Lit lf = Lit(vf);
+          Lit lk = Lit(vk);
+          lits.push(lf); lits.push(lk);
+          _solver->addClause(lits);lits.clear();
+          lits.push(~lf);lits.push(~lk);
+          _solver->addClause(lits);lits.clear();
+      }
       // fa/fb = true if it is inverted
       void addAigCNF(Var vf, Var va, bool fa, Var vb, bool fb) {
          vec<Lit> lits;
