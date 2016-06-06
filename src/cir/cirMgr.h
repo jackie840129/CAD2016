@@ -46,6 +46,7 @@ class CirMgr{
         bool print_io();
         void print_information();
         void genProofModel(SatSolver&);
+        void runsat();
     private :
         vector<Wire*> InputList;
         vector<Wire*> OutputList;
