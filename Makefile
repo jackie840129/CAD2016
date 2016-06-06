@@ -21,6 +21,7 @@ libs:
 
 
 main:
+	@mkdir -p bin
 	@echo "Checking $(MAIN)..."
 	@cd src/$(MAIN); \
 		make -f make.$(MAIN) --no-print-directory INCLIB="$(LIBS)" EXEC=$(EXEC);
