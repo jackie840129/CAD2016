@@ -27,22 +27,23 @@ void assignWire(Wire* &wire, vector<Wire*> vec){
     for(int i=0 ; i<vec.size() ; ++i){
         if(wire->getId()==vec[i]->getId()){
             wire = vec[i];
+            cout << "found " << wire->getId() << " ";
             break;
         }
     }
+    return;
 }
 
 void DFS_Visit(Wire* wire, vector<Wire*> &dfsOrder){
 
     wire->setdfsCheck(global_dfsNum);
-
+    
     if(wire->getFin()==0){
         //dfsOrder.push_back(wire);
         return;
     }
     size_t finSize = wire->getFin()->getFinSize();
     for(size_t i=0 ; i<finSize ; ++i){
-        //if(wire->getFin()==0) continue;
         Wire* w = wire->getFin()->getFin(i);
         if(w->getdfsCheck()!=global_dfsNum){
             DFS_Visit(w,dfsOrder);
@@ -162,17 +163,6 @@ bool CirMgr::read_circuit(const string& file_name){
         #endif
         // PARSE INPUT AND OUTPUT
         string name; // parse the name of each input and outputi
-        /*if(category.compare("module")==0){
-            #ifdef DEBUG
-            cerr << "modele: " << endl;
-            #endif
-            vector<string> parse;
-            lexOption(line,parse);
-            circuitName = parse[0];
-            for(int i=2 ; i<parse.size()-1 ; ++i){
-                circuitIOList.push_back(parse[i][0]);
-            }  
-        }*/
         if(category.compare("input")==0){
             #ifdef DEBUG
             cerr<<"input: "<<endl;

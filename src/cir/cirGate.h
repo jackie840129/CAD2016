@@ -29,7 +29,7 @@ class Wire{
 		void setTF(bool b){_value = b;}
 		bool getTime(){return _time;}
 		void setTime(int t){_time = t;}
-        bool getdfsCheck(){ return _dfsCheck; }
+        int getdfsCheck(){ return _dfsCheck; }
         void setdfsCheck(int num){_dfsCheck = num;}
         string getId(){ return _id; }
 	private:
