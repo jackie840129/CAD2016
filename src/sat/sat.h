@@ -57,6 +57,18 @@ class SatSolver
           lits.push(~la); lits.push(~lb); lits.push(lf);
           _solver->addClause(lits); lits.clear();
       }
+      void addNorCNF(Var vf,Var va,Var vb){
+          vec<Lit> lits;
+          Lit lf = Lit(vf);
+          Lit la = ~Lit(va);
+          Lit lb = ~Lit(vb);
+          lits.push(la); lits.push(~lf);
+          _solver->addClause(lits); lits.clear();
+          lits.push(lb); lits.push(~lf);
+          _solver->addClause(lits); lits.clear();
+          lits.push(~la); lits.push(~lb); lits.push(lf);
+          _solver->addClause(lits); lits.clear();
+      }
       // fa/fb = true if it is inverted
       void addAigCNF(Var vf, Var va, bool fa, Var vb, bool fb) {
          vec<Lit> lits;
