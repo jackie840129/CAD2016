@@ -9,6 +9,8 @@ void CirMgr::genProofModel(SatSolver& s){
         WireList[i]->setVar(v);
     }
 }
+void CirMgr::runsat(){
+}
 
 
 
