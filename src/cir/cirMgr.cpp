@@ -331,7 +331,38 @@ bool CirMgr::read_circuit(const string& file_name){
     }
     cout << endl;
 }
+//Multi-Layer Construction
+//J-You class must change to multiple WireList & GateList
+//
+void CirMgr::multi_Layer(){
+	//TODO input the longest route
+	int layerSize = 0;
+	int wireSize = WireList.size();
+	int gateSize = GateList.size();
+	for(int i=0; i<layerSize; ++i){
+		//i is previous level
+		//i+1 is current level
+		vector<Wire*> currentWireList;
+		vector<Gate*> currentGateList;
+		for(int j=0; j<wireSize; ++j){	
+			Wire* wire = new Wire(WireList[i][j]->getName());
+			currentWireList.push_back(wire);
+		}	
+		for(int j=0; j<gateSize; ++j){
+			Gate* gate = new Gate(WireList[i][j]->getName());
+			currentGateList.push_back(gate);
+		}
+		for(int j=0; j<wireSize; ++j){
+			string prev_name = WireList[i][j]->getid();
+			Gate* gateIn = WireList[i][j]->getFin();
+			vector<Gate*> gateOutVec = WireList[i][j]->	getFout();
+		}
+	}
+}
 
+
+
+//
 bool CirMgr::run_DFS(){
    
     /*global_dfsNum += 1;
@@ -401,4 +432,3 @@ void CirMgr::print_information(){
     cout<<"Output List size = "<<OutputList.size()<<endl;
     cout<<"Gate List size = "<<GateList.size()<<endl;
 }
-
