@@ -41,6 +41,7 @@ class CirMgr{
 
         bool read_module(const string&);
         bool read_circuit(const string&);
+        bool read_timeconstraint(const string&);
         bool run_DFS();
         bool print_DFS();
         bool print_io();
@@ -48,6 +49,7 @@ class CirMgr{
         void genProofModel(SatSolver&);
         void runsat();
     private :
+        int time_constraint;
         vector<Wire*> InputList;
         vector<Wire*> OutputList;
         vector<Gate* > GateList;

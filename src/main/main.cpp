@@ -8,7 +8,7 @@ CirMgr* cirMgr = 0;
 
 
 int main(int argc, char**argv){
-
+    
     cirMgr = new CirMgr();
     string file1 = "PD_case/case0/input/cadcontest.v";
     cirMgr->read_module(file1);
@@ -18,6 +18,8 @@ int main(int argc, char**argv){
     cirMgr->print_io();
     cirMgr->run_DFS();
     cirMgr->print_DFS();
+    string file3 = "PD_case/case1/input/case1.sdc";
+    cirMgr->read_timeconstraint(file3);
     
-
+    cout << "Check assign slack in Makefile: "<<slack<<endl;
 }

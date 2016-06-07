@@ -332,6 +332,23 @@ bool CirMgr::read_circuit(const string& file_name){
     cout << endl;
 }
 
+bool CirMgr::read_timeconstraint(const string& file_name){
+    ifstream file(file_name.c_str());
+    string line;
+    while(getline(file,line)){
+        // check max_delay
+        if(line.size()>9&&line.substr(8,5)=="delay"){
+           // substr the  number
+            int start = 14 ;//start of the time_constraint
+            int end = line.find_first_of(" ",start);
+            string t = line.substr(start, end-start);
+            time_constraint = atoi(t.c_str());
+            cout << "Time Constraint = "<<time_constraint<<endl;
+            break;
+        }
+    }
+
+}
 bool CirMgr::run_DFS(){
    
     /*global_dfsNum += 1;
