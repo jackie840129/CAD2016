@@ -2,14 +2,16 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <math.h>
 #include "cirGate.h"
 #include "cirMgr.h"
 
 using namespace std;
 
-//#define DEBUG
+#define DEBUG
 
 int global_dfsNum = 0;
+// int layerSize = 0;
 
 vector<string> lexOption(string str, vector<string> & vec){
     size_t pos1=0, pos2=0;
@@ -18,39 +20,71 @@ vector<string> lexOption(string str, vector<string> & vec){
        pos1 = str.find_first_not_of(" ",pos2);
        pos2 = str.find_first_of(" ",pos1+1);
        lex = str.substr(pos1,pos2-pos1);
-        vec.push_back(lex);
+       vec.push_back(lex);
     }
     return vec; 
 }
 
-void assignWire(Wire* &wire, vector<Wire*> vec){
-    for(int i=0 ; i<vec.size() ; ++i){
+int assignWire(Wire* &wire, vector<Wire*> vec){
+    for(size_t i=0 ; i<vec.size() ; ++i){
         if(wire->getId()==vec[i]->getId()){
             wire = vec[i];
-            cout << "found " << wire->getId() << " ";
-            break;
+			cout << "found " << wire->getId() << " ";
+            return i;
         }
     }
-    return;
+    return -1;
 }
 
-void DFS_Visit(Wire* wire, vector<Wire*> &dfsOrder){
+// check Gate
+void checkGate(Gate* gate){
+	cerr<<"========================================="<<endl;
+	cerr<<"Gate "<< gate->getId()<<"("<<gate->getType()<<")"<<endl;
+	if(gate->getFin0()->getFin()!=0){
+		Gate* gateIn0 = gate->getFin0()->getFin();
+		cerr<<"FanIn0 connected to Gate "<<gateIn0->getId()<<"("<<gateIn0->getType()<<")"<<endl;
+	}
+	else{
+		cerr<<"FanIn0 connected to Input "<<gate->getFin0()->getId()<<endl;
+	}
+	if(gate->getType()!="not"){
+		if(gate->getFin1()->getFin()!=0){
+			Gate* gateIn1 = gate->getFin1()->getFin();
+			cerr<<"FanIn1 connected to Gate "<<gateIn1->getId()<<"("<<gateIn1->getType()<<")"<<endl;
+		}
+		else{
+			cerr<<"FanIn1 connected to Input "<<gate->getFin1()->getId()<<endl;
+		}	
+	}
+	if((gate->getFout())->getFout().size()==0)
+		cerr<<"This is Connect to output wire: "<<(gate->getFout())->getId()<<endl;
+	cerr<<"========================================="<<endl;
+}
+
+int max(int a, int b){
+	return (a>b)?a :b;
+}
+
+void CirMgr::DFS_Visit(Wire* wire, vector<Wire*> &dfsOrder, int& depth){
 
     wire->setdfsCheck(global_dfsNum);
-    
     if(wire->getFin()==0){
         //dfsOrder.push_back(wire);
+		int d = depth;
+		setLayerSize(max(_layerSize, d));
         return;
     }
     size_t finSize = wire->getFin()->getFinSize();
     for(size_t i=0 ; i<finSize ; ++i){
         Wire* w = wire->getFin()->getFin(i);
         if(w->getdfsCheck()!=global_dfsNum){
-            DFS_Visit(w,dfsOrder);
+            depth += 1; 
+            DFS_Visit(w,dfsOrder, depth);
+			depth -= 1;
             dfsOrder.push_back(w);
         }
     }
-
+    return;
 }
 
 bool CirMgr::read_module(const string& file_name){
@@ -95,7 +129,7 @@ bool CirMgr::read_module(const string& file_name){
                 }
                 #ifdef DEBUG
                 vector<string>temp = ModuleList[module_no]->getInput();
-                for(int i=0;i<temp.size();i++){
+                for(size_t i=0;i<temp.size();i++){
                     cerr<<"input = "<<temp[i]<<endl;
                 }
                 #endif
@@ -117,12 +151,19 @@ bool CirMgr::read_module(const string& file_name){
 
             }
 
-
+	return true;
 
 }
-
+void setVNum(Gate* gate, int out, int in0, int in1=-1){
+	gate->setFoutVecNum(out);
+	gate->addFinVecNum(in0);
+	if(in1!=-1){
+		gate->addFinVecNum(in1);
+	}
+}
 bool CirMgr::read_circuit(const string& file_name){    
     cout << "now reading case1" << endl;
+	int count = 0;
     ifstream ifs(file_name.c_str());
     string line; // read every line in the file into "line"
     string category; // specify which catergory I am now reading. Ex. input, output, wire.
@@ -169,7 +210,7 @@ bool CirMgr::read_circuit(const string& file_name){
             #endif
             vector<string> parse;
             lexOption(line, parse);
-            for(int i=0 ; i<parse.size() ; ++i){
+            for(size_t i=0 ; i<parse.size() ; ++i){
                 size_t pos = parse[i].find_first_of(",;");
                 string name = parse[i].substr(0,pos);
                 #ifdef DEBUG
@@ -177,8 +218,10 @@ bool CirMgr::read_circuit(const string& file_name){
                 #endif
                 Wire* wire = new Wire(name);
                 wire->setFin(0);
-                InputList.push_back(wire);
-                WireList.push_back(wire);
+				wire->setListNum(count);
+				++count;
+                InputList[0].push_back(wire);
+                WireList[0].push_back(wire);
             }
         }
         else if(category.compare("output")==0){
@@ -187,7 +230,7 @@ bool CirMgr::read_circuit(const string& file_name){
             #endif
             vector<string> parse;
             lexOption(line, parse);
-            for(int i=0 ; i<parse.size() ; ++i){
+            for(size_t i=0 ; i<parse.size() ; ++i){
                 size_t pos = parse[i].find_first_of(",;");
                 string name = parse[i].substr(0,pos);
                 #ifdef DEBUG
@@ -195,8 +238,10 @@ bool CirMgr::read_circuit(const string& file_name){
                 #endif
                 Wire* wire = new Wire(name);
                 wire->addFout(0);
-                OutputList.push_back(wire);
-                WireList.push_back(wire);
+				wire->setListNum(count);
+				++count;
+                OutputList[0].push_back(wire);
+                WireList[0].push_back(wire);
             }       
         }
         else if(category.compare("wire")==0){
@@ -205,14 +250,16 @@ bool CirMgr::read_circuit(const string& file_name){
             #endif
             vector<string> parse;
             lexOption(line, parse);
-            for(int i=0 ; i<parse.size() ; ++i){
+            for(size_t i=0 ; i<parse.size() ; ++i){
                 size_t pos = parse[i].find_first_of(",;");
                 string name = parse[i].substr(0,pos);
                 #ifdef DEBUG
                 cerr<<name<<" ";
                 #endif
                 Wire* wire = new Wire(name);
-                WireList.push_back(wire);
+				wire->setListNum(count);
+				++count;
+                WireList[0].push_back(wire);
             }       
         }
         else if(category.compare("gate")==0){
@@ -240,27 +287,32 @@ bool CirMgr::read_circuit(const string& file_name){
             
             #ifdef DEBUG
             cerr<<"gate: ";
-            for(int i=0 ; i<param.size() ; ++i){
+            for(size_t i=0 ; i<param.size() ; ++i){
                 cerr<<param[i]<<" ";
             }
             #endif
             //cout << endl;
+			int in0;
+			int in1;
+			int out;
             if(param[0].compare("NOT1")==0){
                 if(param[2].compare("Y")==0){
                     Wire* wire_in = new Wire(param[5]);
                     Wire* wire_out = new Wire(param[3]);
-                    assignWire(wire_in,WireList);
-                    assignWire(wire_out,WireList);
-                    Gate* gate = new Gate("not", param[1], wire_in, 0, wire_out);
-                    GateList.push_back(gate);
+                    in0 = assignWire(wire_in,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
+					Gate* gate = new Gate("not", param[1], wire_in, 0, wire_out);
+                    setVNum(gate,out,in0);
+					GateList[0].push_back(gate);
                 }
                 else if(param[4].compare("Y")==0){
                     Wire* wire_in = new Wire(param[3]);
                     Wire* wire_out = new Wire(param[5]);
-                    assignWire(wire_in,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("not", param[1], wire_in, 0, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0);
+                    GateList[0].push_back(gate);
                 }
             }
             else if(param[0].compare("NOR2")==0){
@@ -268,31 +320,34 @@ bool CirMgr::read_circuit(const string& file_name){
                     Wire* wire_in1 = new Wire(param[5]);
                     Wire* wire_in2 = new Wire(param[7]);
                     Wire* wire_out = new Wire(param[3]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
                 else if(param[4].compare("Y")==0){
                     Wire* wire_in1 = new Wire(param[3]);
                     Wire* wire_in2 = new Wire(param[7]);
                     Wire* wire_out = new Wire(param[5]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
                 else if(param[6].compare("Y")==0){
                     Wire* wire_in1 = new Wire(param[3]);
                     Wire* wire_in2 = new Wire(param[5]);
                     Wire* wire_out = new Wire(param[7]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
             }
             else if(param[0].compare("NAND2")==0){
@@ -300,31 +355,34 @@ bool CirMgr::read_circuit(const string& file_name){
                     Wire* wire_in1 = new Wire(param[5]);
                     Wire* wire_in2 = new Wire(param[7]);
                     Wire* wire_out = new Wire(param[3]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
                 else if(param[4].compare("Y")==0){
                     Wire* wire_in1 = new Wire(param[3]);
                     Wire* wire_in2 = new Wire(param[7]);
                     Wire* wire_out = new Wire(param[5]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
                 else if(param[6].compare("Y")==0){
                     Wire* wire_in1 = new Wire(param[3]);
                     Wire* wire_in2 = new Wire(param[5]);
                     Wire* wire_out = new Wire(param[7]);
-                    assignWire(wire_in1,WireList);
-                    assignWire(wire_in2,WireList);
-                    assignWire(wire_out,WireList);
+                    in0 = assignWire(wire_in1,WireList[0]);
+                    in1 = assignWire(wire_in2,WireList[0]);
+                    out = assignWire(wire_out,WireList[0]);
                     Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
-                    GateList.push_back(gate);
+                    setVNum(gate,out,in0,in1);
+                    GateList[0].push_back(gate);
                 }
             }
         }
@@ -334,30 +392,98 @@ bool CirMgr::read_circuit(const string& file_name){
 //Multi-Layer Construction
 //J-You class must change to multiple WireList & GateList
 //
-void CirMgr::multi_Layer(){
+void CirMgr::multi_Layer(size_t Layer=0){
 	//TODO input the longest route
-	int layerSize = 0;
-	int wireSize = WireList.size();
-	int gateSize = GateList.size();
-	for(int i=0; i<layerSize; ++i){
-		//i is previous level
+	size_t layerSize = Layer;
+	size_t wireSize = WireList[0].size();
+	size_t gateSize = GateList[0].size();
+	size_t inputSize = InputList[0].size();
+	size_t outputSize = OutputList[0].size();
+	for(size_t i=0; i<layerSize; ++i){
+		//i is previous levelu
 		//i+1 is current level
 		vector<Wire*> currentWireList;
 		vector<Gate*> currentGateList;
-		for(int j=0; j<wireSize; ++j){	
-			Wire* wire = new Wire(WireList[i][j]->getName());
+		vector<Wire*> currentInputList;
+		int in0, in1, out;
+		for(size_t j=0; j<wireSize; ++j){	
+			Wire* wire = new Wire(WireList[i][j]->getId());
+			wire->setListNum(j);
 			currentWireList.push_back(wire);
-		}	
-		for(int j=0; j<gateSize; ++j){
-			Gate* gate = new Gate(WireList[i][j]->getName());
+			/*if(j>=inputSize && j<outputSize+inputSize){
+				currentWireList.push_back(wire);
+			}*/
+		}
+        #ifdef DEBUG
+        cerr << "constuct a layer, new current WireList[i]" << endl;
+        #endif
+
+		//input of newer
+		if(i == 0){
+			for(size_t k=0; k<inputSize; ++k){
+				currentWireList[k]->setFin(0);
+				currentInputList.push_back(currentWireList[k]);
+			}
+			InputList.push_back(currentInputList);
+		}
+        
+        #ifdef DEBUG
+        if(i==0){
+        	cerr<< " Second layer input = " << endl;
+            for(size_t j=0 ; j<inputSize ; ++j){
+                cerr << currentInputList[j]->getId() << " ";
+            }
+        }
+        #endif
+		//gate implement
+		for(size_t j=0; j<gateSize; ++j){
+			Gate* gate = new Gate(GateList[i][j]->getType(),GateList[i][j]->getId(),0,0,0);
+			#ifdef DEBUG
+            cerr << "new Gate in gateList["<<i<<"][" << j << "] --FINISHED..." << endl;
+            #endif
+
+			in0 = GateList[i][j]->getFin0VecNum();
+			out = GateList[i][j]->getFoutVecNum();
+			if(in0<(int)inputSize){
+				gate->setFin0(InputList[1][in0]);
+				InputList[1][in0]->addFout(gate);
+			}
+			else{
+				gate->setFin0(WireList[i][in0]);
+				WireList[i][in0]->addFout(gate);
+			}
+			gate->setFout(currentWireList[out]);
+			currentWireList[out]->setFin(gate);
+			if(gate->getType()!="not"){
+				in1 = GateList[i][j]->getFin1VecNum();
+				if(in1<(int)inputSize){
+					gate->setFin1(InputList[1][in1]);
+					InputList[1][in1]->addFout(gate);
+				}
+				else{
+					gate->setFin1(WireList[i][in1]);
+					WireList[i][in1]->addFout(gate);
+				}
+                setVNum(gate,out,in0,in1);
+			}
+			else{
+                setVNum(gate,out,in0);
+			}
 			currentGateList.push_back(gate);
 		}
-		for(int j=0; j<wireSize; ++j){
-			string prev_name = WireList[i][j]->getid();
-			Gate* gateIn = WireList[i][j]->getFin();
-			vector<Gate*> gateOutVec = WireList[i][j]->	getFout();
+		WireList.push_back(currentWireList);
+		GateList.push_back(currentGateList);
+	}
+	#ifdef DEBUG
+    cerr <<"Check All Gate"<< endl;
+    
+	for(size_t i=0;i<layerSize;++i){
+		cerr<<"\n*********LAYER "<<i<<"*********\n"<<endl;
+		for(size_t j=0;j<gateSize;++j){
+			checkGate(GateList[i][j]);	
 		}
 	}
+	#endif	
 }
 
 
@@ -370,22 +496,27 @@ bool CirMgr::run_DFS(){
     cout << "fuck" << endl;
     DFS_Visit(OutputList[0],vec);
     DFSList.push_back(vec);*/
-    for(int i=0 ; i<OutputList.size() ; ++i){
+	_layerSize = 0;
+    for(size_t i=0 ; i<OutputList[0].size() ; ++i){
         //cout << "Output(" << i << ") " << OutputList[i]->getId() << endl;
-        global_dfsNum += 1;
+		int depth = 1;
+        global_dfsNum += 1; 
         vector<Wire*> vec;
-        DFS_Visit(OutputList[i],vec);
-        vec.push_back(OutputList[i]);
+        DFS_Visit(OutputList[0][i],vec, depth);
+        vec.push_back(OutputList[0][i]);
         DFSList.push_back(vec);
-    }   
+    } 
+	cout << "layerSize = " << getLayerSize() << endl;
+	return true;
+
 }
 
 bool CirMgr::print_DFS(){
 
     cout << "PRINT_DFS" << endl;
-    for(int i=0 ; i<DFSList.size() ; ++i){
-        cout << "Output" << i << " (" << OutputList[i]->getId() << ")" << endl;
-        for(int j=0 ; j<DFSList[i].size() ; ++j){
+    for(size_t i=0 ; i<DFSList.size() ; ++i){
+        cout << "Output" << i << " (" << OutputList[0][i]->getId() << ")" << endl;
+        for(size_t j=0 ; j<DFSList[i].size() ; ++j){
             if(j==0)
                 cout << DFSList[i][j]->getId();
             else
@@ -393,30 +524,30 @@ bool CirMgr::print_DFS(){
         }
         cout << endl;
     }
+	return true;
 }
 
 bool CirMgr::print_io(){
-    
-    cout << "========= PRINT_IO =========" << endl;
+    cout << "========= PRINT_IO =========" << endl; 
     cout << "GATE:" << endl;
-    for(int i=0 ; i<GateList.size() ; ++i){
+    for(size_t i=0 ; i<GateList[0].size() ; ++i){
         cout << "(" << i << ")";
-        cout << " ID = " << GateList[i]->getId();
-        cout << ", Type = " << GateList[i]->getType();
-        cout << ", Fanin0 = " << GateList[i]->getFin0()->getId();
-        if(GateList[i]->getFin1()!=0)
-            cout << ", Fanin1 = " << GateList[i]->getFin1()->getId();
-        cout << ", Fanout = " << GateList[i]->getFout()->getId();
+        cout << " ID = " << GateList[0][i]->getId();
+        cout << ", Type = " << GateList[0][i]->getType();
+        cout << ", Fanin0 = " << GateList[0][i]->getFin0()->getId();
+        if(GateList[0][i]->getFin1()!=0)
+            cout << ", Fanin1 = " << GateList[0][i]->getFin1()->getId();
+        cout << ", Fanout = " << GateList[0][i]->getFout()->getId();
         cout << endl;
     }
 
     cout << "WIRE: " << endl;
-    for(int i=0 ; i<WireList.size() ; ++i){
+    for(size_t i=0 ; i<WireList[0].size() ; ++i){
         cout << "(" << i << ")";
-        cout << " ID = " << WireList[i]->getId();
-        if(WireList[i]->getFin()!=0){
-            cout << ", Fanin = " << WireList[i]->getFin()->getId() << " (";
-            Gate* gate = WireList[i]->getFin();
+        cout << " ID = " << WireList[0][i]->getId();
+        if(WireList[0][i]->getFin()!=0){
+            cout << ", Fanin = " << WireList[0][i]->getFin()->getId() << " (";
+            Gate* gate = WireList[0][i]->getFin();
             cout << " " << gate->getFin0()->getId();
             if(gate->getFin1()!=0)
                 cout << " " << gate->getFin1()->getId();
@@ -428,7 +559,7 @@ bool CirMgr::print_io(){
     return true;
 }
 void CirMgr::print_information(){
-    cout<<"Input List size = "<<InputList.size()<<endl;
-    cout<<"Output List size = "<<OutputList.size()<<endl;
-    cout<<"Gate List size = "<<GateList.size()<<endl;
+    cout<<"Input List size = "<<InputList[0].size()<<endl;
+    cout<<"Output List size = "<<OutputList[0].size()<<endl;
+    cout<<"Gate List size = "<<GateList[0].size()<<endl;
 }

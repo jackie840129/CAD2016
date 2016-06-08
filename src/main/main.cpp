@@ -18,6 +18,7 @@ int main(int argc, char**argv){
     cirMgr->print_io();
     cirMgr->run_DFS();
     cirMgr->print_DFS();
-    
+	
+	cirMgr->multi_Layer(cirMgr->getLayerSize());    
 
 }
