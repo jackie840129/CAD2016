@@ -6,7 +6,7 @@
 void CirMgr::genProofModel(SatSolver& s){
     for(size_t i = 0;i<WireList.size();++i){
         Var v = s.newVar();
-        WireList[i]->setVar(v);
+        WireList[0][i]->setVar(v);
     }
 }
 void CirMgr::runsat(){

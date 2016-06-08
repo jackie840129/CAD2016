@@ -16,6 +16,7 @@ class Wire{
 			_id = id;
 			_time = time;
             _dfsCheck = 0;
+			_fin = 0;
 		}
 		~Wire(){}
 		Gate* getFin(){return _fin;}
@@ -34,6 +35,9 @@ class Wire{
         string getId(){ return _id; }
         Var getVar(){return _var;}
         void setVar(Var v){_var = v;}
+
+		int getListNum(){return _listNum;}
+		void setListNum(int i){_listNum = i;}
 	private:
 		Gate* _fin;
 		vector<Gate *> _fout;
@@ -43,16 +47,21 @@ class Wire{
 		int _time;
 		string _id;
         Var _var;
+		int _listNum;
 };
 class Gate{
 	public:
-		Gate(string type,string id, Wire* fin0, Wire* fin1, Wire* fo, int delay=1){
+		Gate(string type, string id, Wire* fin0, Wire* fin1, Wire* fo, int delay=1){
 			_type = type;
             _id = id;
-			_fout = fo;
-			fo->setFin(this);
-			_fin.push_back(fin0);
-			fin0->addFout(this);
+            if(fo!=0){
+                _fout = fo;
+                fo->setFin(this);
+            }
+            if(fin0!=0){
+                _fin.push_back(fin0);
+                fin0->addFout(this);
+            }
             if(fin1!=0){
 			    _fin.push_back(fin1);
 			    fin1->addFout(this);
@@ -91,6 +100,23 @@ class Gate{
 				_fin[1]=w;
 		}
 		
+		void setFoutVecNum(int i){
+			_foutVecNum = i;
+		}
+		void addFinVecNum(int i){
+			_finVecNum.push_back(i);
+		}
+
+		int getFoutVecNum(){return _foutVecNum;}
+		int getFin0VecNum(){return _finVecNum[0];}
+		int getFin1VecNum(){
+			if(_type !="not")
+				return _finVecNum[1];
+			else{
+				cerr<<"FATAL ERROR!! (in getFin1VecNum)"<<endl;
+				return 0;
+			}
+		}
 		//Call this function while you are sure that the fanin wire is initialized
 		void simulation();
 		
@@ -99,6 +125,8 @@ class Gate{
 		string _type;
 		Wire* _fout;
 		vector<Wire*> _fin;
+		vector<int> _finVecNum;
+		int _foutVecNum;
 		int _delay;
 };
 

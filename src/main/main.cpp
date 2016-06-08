@@ -20,6 +20,6 @@ int main(int argc, char**argv){
     cirMgr->print_DFS();
     string file3 = "PD_case/case1/input/case1.sdc";
     cirMgr->read_timeconstraint(file3);
-    
     cout << "Check assign slack in Makefile: "<<slack<<endl;
+	cirMgr->multi_Layer(cirMgr->getLayerSize());    
 }
