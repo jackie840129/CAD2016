@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "cirGate.h"
-#include <map>
+#include <fstream>
 #include "sat.h"
 using namespace std;
 
@@ -44,7 +44,9 @@ class CirMgr{
 			GateList.push_back(gVec);
 			OutputList.push_back(wVec);
 			WireList.push_back(wVec);
-		}
+           // time_constraint = 10; //just for test case 0;
+            output_file = 0;
+        }
         ~CirMgr(){}
 
         bool read_module(const string&);
@@ -55,13 +57,21 @@ class CirMgr{
         bool run_DFS();
         bool print_DFS();
         bool print_io();
+        string get_inputfile(){return input_file;}
+        ofstream* get_outputfile(){return output_file;}
+        void set_inputfile(string f){input_file = f;}
+        void set_outputfile(ofstream* f){output_file = f;}
         void print_information();
-        void genProofModel(SatSolver&);
-        void runsat();	
+        void genProofModel(SatSolver&, int);
+        void runsat();
+        void DFS_sat(SatSolver& s, Wire* o, size_t t, vector<Wire*> path, int i, bool RF);
+        void outputPath(SatSolver& s, vector<Wire*> path);
 		// GET SET LAYERSIZE
 		void setLayerSize(int l){ _layerSize = l; }
 		int getLayerSize(){ return _layerSize; }
     private :
+        string input_file;
+        ofstream* output_file;
         int time_constraint;
 		int _layerSize;
         vector< vector<Wire*> > InputList;
