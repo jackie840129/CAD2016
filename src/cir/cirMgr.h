@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "cirGate.h"
-#include <map>
+#include <fstream>
 #include "sat.h"
 using namespace std;
 
@@ -36,24 +36,48 @@ class module{
 class CirMgr{
 
     public :
-        CirMgr(){}
+        CirMgr(){
+			_layerSize = 0;
+            vector<Wire*> wVec;
+            vector<Gate*> gVec;
+			InputList.push_back(wVec);
+			GateList.push_back(gVec);
+			OutputList.push_back(wVec);
+			WireList.push_back(wVec);
+           // time_constraint = 10; //just for test case 0;
+            output_file = 0;
+        }
         ~CirMgr(){}
 
         bool read_module(const string&);
         bool read_circuit(const string&);
         bool read_timeconstraint(const string&);
+		void multi_Layer(size_t);
+        void DFS_Visit(Wire*, vector<Wire*>&, int&);
         bool run_DFS();
         bool print_DFS();
         bool print_io();
+        string get_inputfile(){return input_file;}
+        ofstream* get_outputfile(){return output_file;}
+        void set_inputfile(string f){input_file = f;}
+        void set_outputfile(ofstream* f){output_file = f;}
         void print_information();
-        void genProofModel(SatSolver&);
+        void genProofModel(SatSolver&, int);
         void runsat();
+        void DFS_sat(SatSolver& s, Wire* o, size_t t, vector<Wire*> path, int i, bool RF);
+        void outputPath(SatSolver& s, vector<Wire*> path);
+		// GET SET LAYERSIZE
+		void setLayerSize(int l){ _layerSize = l; }
+		int getLayerSize(){ return _layerSize; }
     private :
+        string input_file;
+        ofstream* output_file;
         int time_constraint;
-        vector<Wire*> InputList;
-        vector<Wire*> OutputList;
-        vector<Gate* > GateList;
-        vector<Wire* > WireList;
+        int _layerSize;
+        vector< vector<Wire*> > InputList;
+        vector< vector<Wire*> > OutputList;
+        vector< vector<Gate*> > GateList;
+        vector< vector<Wire*> > WireList;
         vector<string> TruePath;
         vector<module*> ModuleList;
         vector< vector<Wire*> > DFSList;

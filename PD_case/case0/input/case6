@@ -1,0 +1,10 @@
+module mul2 ( M, A, B );
+  input A2, A1, A0;
+  output M0;
+  wire n1, n2, n3;
+
+  NOT1 U1 ( .A(n1), .Y(M0) );
+  NOR2 U2 ( .A(n2), .B(n3), .Y(n1) );
+  NAND2 U3 ( .A(A0), .B(A1), .Y(n2) ); 
+  NAND2 U4 ( .A(A1), .B(A2), .Y(n3) );
+endmodule
