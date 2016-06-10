@@ -30,7 +30,6 @@ class module{
         string function;
         vector<string> input;
         string output;
-        int delay;
 };
 
 class CirMgr{
@@ -50,7 +49,7 @@ class CirMgr{
         ~CirMgr(){}
 
         bool read_module(const string&);
-        bool read_circuit(const string&);
+        void read_circuit(const string&);
         bool read_timeconstraint(const string&);
 		void multi_Layer(size_t);
         void DFS_Visit(Wire*, vector<Wire*>&, int&);
@@ -65,10 +64,12 @@ class CirMgr{
         void genProofModel(SatSolver&, int);
         void runsat();
         void DFS_sat(SatSolver& s, Wire* o, size_t t, vector<Wire*> path, int i, bool RF);
-        void outputPath(SatSolver& s, vector<Wire*> path);
+        void outputPath(SatSolver& s, vector<Wire*> path,int input_num,bool risefall);
 		// GET SET LAYERSIZE
 		void setLayerSize(int l){ _layerSize = l; }
 		int getLayerSize(){ return _layerSize; }
+        void settime_constraint(int a){time_constraint = a;}
+        int get_time_constraint(){return time_constraint;}
     private :
         string input_file;
         ofstream* output_file;

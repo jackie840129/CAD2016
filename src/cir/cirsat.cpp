@@ -2,10 +2,9 @@
 #include "cirMgr.h"
 #include "cirGate.h"
 #include "sat.h"
-
-
+#include<iomanip>
+int countpath = 0;
 void CirMgr::genProofModel(SatSolver& s, int inputIndex){
-
     for(size_t i = 0;i<InputList[0].size();++i){
         if(i==inputIndex){
             Var v1 = s.newVar();
@@ -68,10 +67,9 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
 }
 void CirMgr::runsat(){
     SatSolver solver;
+    solver.initialize();
     cout<<"Start running SAT..."<<endl;
-   
     for(size_t i = 0; i< InputList[0].size();++i){
-        solver.initialize();
         genProofModel(solver, i);
         //做兩次  0->1  & 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 0 to 1, start SAT..."<<endl;
@@ -151,7 +149,7 @@ void CirMgr::runsat(){
            ++arrival_time;
         }
     }
-
+cout<<countpath<<endl;
 }
 
 
@@ -188,11 +186,13 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
         }
         //if it is PI or bottom layer
         else if(time == 1){ 
-            if(o->getFin()!=0&&(o->getFin()->getFin(0)->getFin()==0||o->getFin()->getFin(1)->getFin()==0)){ //if it is PI
+            if(o->getFin()!=0&&(o->getFin()->getFin(0)->getFin()==0||o->getFin()->getFin(1)->getFin()==0)){ 
+                //if it is PI
                 //get input vector
                 //output to file
-               // outputPath(solver, path);    
+               outputPath(solver, path,input_num,RiseFall);    
                cout<<"Input vector:"<<endl;
+               countpath++;
                for(size_t i=0;i<InputList[1].size();i++){
                    cout<<InputList[1][i]->getId()<<" : [ "<<solver.getValue(InputList[1][i]->getVar())<<" ]"<<endl;
                }
@@ -212,25 +212,136 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
     
 }
 
-int PATH_NO = 1;
+int PATH_NO = 0;
 
-void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path){
+void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool risefall){
     //first path
+    PATH_NO++;
     if(PATH_NO == 1){
         (*output_file)<<"Header { A True Path Set }"<<endl;
         (*output_file)<<endl;
-        (*output_file)<<endl;
         (*output_file)<<" Benchmark { "<<input_file<<" }"<<endl;
         (*output_file)<<endl;
-        (*output_file)<<endl;
     }
-
     (*output_file)<<" Path { "<<PATH_NO<<" }"<<endl;
     (*output_file)<<endl;
+    (*output_file)<<" A True Path List\n"<<" {"<<endl;
+    (*output_file)<<" ";
+    for(int i = 0;i<75;++i)(*output_file)<<"-";
     (*output_file)<<endl;
+    (*output_file)<<" ";
+    (*output_file)<<setw(10)<<left<<"Pin";
+    (*output_file)<<setw(25)<<left<<"type";
+    (*output_file)<<setw(20)<<left<<"Incr";
+    (*output_file)<<setw(15)<<left<<"Path delay";
+    (*output_file)<<endl;
+    (*output_file)<<" ";
+    for(int i = 0;i<75;++i)(*output_file)<<"-";
+    (*output_file)<<endl;
+    //change to gate
+    vector<Gate*>path_g;
+    vector<Wire*>new_path;
+    new_path.push_back(InputList[1][input_num]);
+    for(size_t i = path.size()-1;;--i){
+        path_g.push_back(path[i]->getFin());
+        new_path.push_back(path[i]);
+        if(i == 0)break;
+    }
+    /*
+    (*output_file)<<new_path[0]->getId()<<" ";
+    for(size_t i =0;i<path_g.size();++i){
+        (*output_file)<<path_g[i]->getId()<<" ";
+        (*output_file)<<new_path[i+1]->getId()<<" ";
+    }
+    (*output_file)<<endl;
+    */
+    //output input~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    int delay=0;
+    string English = new_path[0]->getId().substr(0,1);
+    string number =  new_path[0]->getId().substr(1);
+    string rf = risefall?"r":"f";
+    string temp = English+"["+number+"]";
+    (*output_file)<<" ";
+    (*output_file)<<setw(10)<<left<<temp;
+    (*output_file)<<setw(25)<<left<<"(in)";
+    (*output_file)<<setw(20)<<left<<" 0";
+    temp = "0 "+rf;
+    (*output_file)<<setw(15)<<left<<temp;
+    (*output_file)<<endl;
+    //-------output gate
+    for(size_t i =0;i<path_g.size();++i){
+        int whichwire ;
+        string AB;
+        for(size_t j =0; j<path_g[i]->getFinSize();++j){
+            if((path_g[i]->getFin(j))->getId() == new_path[i]->getId()){
+                whichwire = j;
+            }
+        }
+        //here ↓↓↓↓↓↓↓↓
+        AB = whichwire == 0? "0":"1";
+        temp = path_g[i]->getId()+"/"+AB;
+        (*output_file)<<" ";
+        (*output_file)<<setw(10)<<left<<temp;
+        temp = "("+path_g[i]->getType()+")";
+        (*output_file)<<setw(25)<<left<<temp;
+        (*output_file)<<setw(20)<<left<<" 0";
+        (*output_file)<<left<<delay<<" ";
+        ++delay;
+        rf = solver.getValue(new_path[i]->getVar())?"r":"f";
+        (*output_file)<<left<<rf<<endl;
+        //--
+        (*output_file)<<" ";
+        temp = path_g[i]->getId()+"/"+"Y";
+        (*output_file)<<setw(10)<<left<<temp;
+        temp = "("+path_g[i]->getType()+")";
+        (*output_file)<<setw(25)<<left<<temp;
+        (*output_file)<<setw(20)<<left<<" 1";
+        (*output_file)<<left<<delay<<" ";
+        rf = solver.getValue(new_path[i+1]->getVar())?"r":"f";
+        (*output_file)<<left<<rf<<endl;
+    }
+    //output output
+    English = new_path.back()->getId().substr(0,1);
+    number =  new_path.back()->getId().substr(1);
+    rf = solver.getValue(new_path.back()->getVar())?"r":"f";
+    temp = English+"["+number+"]";
+    (*output_file)<<" ";
+    (*output_file)<<setw(10)<<left<<temp;
+    (*output_file)<<setw(25)<<left<<"(out)";
+    (*output_file)<<setw(20)<<left<<" 0";
+    (*output_file)<<left<<delay<<" ";
+    (*output_file)<<left<<rf<<endl;
+
+    (*output_file)<<" ";
+    for(int i = 0;i<75;++i)(*output_file)<<"-";
+    (*output_file)<<endl;
+    (*output_file)<<" Data Required Time";
+    (*output_file)<<setw(14)<<right<<time_constraint<<endl;
+    (*output_file)<<" Data Arrival Time";
+    (*output_file)<<setw(15)<<right<<delay<<endl;
+    (*output_file)<<" ";
+    for(int i = 0;i<75;++i)(*output_file)<<"-";
+    (*output_file)<<endl;
+    (*output_file)<<" Slack";
+    (*output_file)<<setw(27)<<right<<time_constraint-delay<<endl;
+    (*output_file)<<" }\n\n";
 
 
-    
+    (*output_file)<<" Input Vector\n"<<" {"<<endl;
+    for(size_t i = 0;i<InputList[1].size();++i){
+        char English = InputList[1][i]->getId()[0];
+        string number = InputList[1][i]->getId().substr(1); 
+        (*output_file)<<"   "<<English<<"["<<number<<"]  =  ";
+        if(i!=input_num){
+            (*output_file)<<solver.getValue(InputList[1][i]->getVar())<<endl;
+        }
+        else{
+            if(risefall)(*output_file)<<"r"<<endl;
+            else (*output_file)<<"f"<<endl;
+        }
+
+    }
+    (*output_file)<<" }\n\n";
 
 }
 

@@ -15,7 +15,7 @@ ECHO      = /bin/echo
 
 CFLAGS = -O3 -m32 -Wall -DTA_KB_SETTING $(PKGFLAG)
 CFLAGS = -O3 -Wall -DTA_KB_SETTING $(PKGFLAG)
-CFLAGS = -O3 -Wall -D slack=6 -DTA_KB_SETTING $(PKGFLAG)
+CFLAGS = -O3 -Wall -D slack=7 -DTA_KB_SETTING $(PKGFLAG)
 
 
 

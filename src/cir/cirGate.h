@@ -22,7 +22,9 @@ class Wire{
 		Gate* getFin(){return _fin;}
 		void setFin(Gate* g){_fin=g;}
 		vector<Gate *> getFout(){return _fout;}
+        vector<string> getfoutSY(){return _foutSY;}
 		void addFout(Gate * g){_fout.push_back(g);}
+        void addFoutSY(string s){_foutSY.push_back(s);}
 		//void 
 		bool getValue(){return _value;}
 		void setValue(bool b){_value = b;}
@@ -41,6 +43,7 @@ class Wire{
 	private:
 		Gate* _fin;
 		vector<Gate *> _fout;
+        vector<string> _foutSY;
 		bool _value;
 		bool _isTF;
         int _dfsCheck;
@@ -118,7 +121,7 @@ class Gate{
 			}
 		}
 		//Call this function while you are sure that the fanin wire is initialized
-		void simulation();
+		//void simulation();
 		
 	private:
 		string _id;			

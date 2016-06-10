@@ -2,7 +2,7 @@
 #include <iostream>
 
 using namespace std;
-
+/*
 void
 Gate::simulation(){
 	int time0, time1, fouttime;
@@ -236,3 +236,4 @@ Gate::simulation(){
 	else
 		cerr<<"ERROR: no such gate: \""<<_type<<"\""<<endl;
 }
+*/

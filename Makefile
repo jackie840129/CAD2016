@@ -8,7 +8,7 @@ SRCLIBS = $(addsuffix .a, $(addprefix lib, $(LIBPKGS)))
 EXEC=cadJYu
 
 
-all: libs main
+all: clean libs main
 	@echo -n "J Yu compile success \n"
 
 libs: 
