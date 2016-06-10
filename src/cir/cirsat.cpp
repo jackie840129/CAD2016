@@ -74,12 +74,12 @@ void CirMgr::runsat(){
         //做兩次  0->1  & 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 0 to 1, start SAT..."<<endl;
         //see outs , solve SAT
-        size_t arrival_time = time_constraint - slack + 1  ; //find the path >slack, one for t=0 ->-inf,
+        size_t arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
 
-
+        vector<bool> changed(OutputList[0].size()); //to make sure it is the last time the output change
         while(true){  //for time layer
             cout<<" *******************LayerSize: "<<_layerSize<<endl;
-            if(arrival_time > _layerSize)break; 
+            if(arrival_time < time_constraint - slack +1 )break; 
          //  cerr<<"SAT from Layer "<<arrival_time<<endl;
             
             size_t InputSize = InputList[0].size();
@@ -87,16 +87,21 @@ void CirMgr::runsat(){
             for(size_t j = InputSize;j<InputSize+OutputSize;++j){  //for each output
                 cout<<"from "<<WireList[arrival_time][j]->getId()<<endl;   
                 Var newV = solver.newVar();
+                Var newV2 = solver.newVar();
                 solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(),
                                false, WireList[arrival_time-1][j]->getVar(), false);
+                solver.addXorCNF(newV2, WireList[arrival_time][j]->getVar(),
+                               false, WireList[0][j]->getVar(), false);
                 solver.assumeRelease();
                 solver.assumeProperty(InputList[0][i]->getVar(),false);
                 solver.assumeProperty(InputList[1][i]->getVar(),true);
                 solver.assumeProperty(newV, true); //output change
+                solver.assumeProperty(newV2,true);
 
                 bool isSat = solver.assumpSolve();
               // if is satisfiable
-                if(isSat){
+                if(isSat && !changed[j-InputSize]){
+                    changed[j-InputSize] = true;
                     cout<< "Start running DFS..."<<endl;
                     vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                     Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
@@ -108,16 +113,17 @@ void CirMgr::runsat(){
                 }
             
             }
-            ++arrival_time;
+            --arrival_time;
         }
         // 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 1 to 0, start SAT..."<<endl;
         //see outs , solve SAT
-        arrival_time = time_constraint - slack + 1  ; //find the path >slack, one for t=0 ->-inf,
+        arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
 
+        vector<bool> changed2(OutputList[0].size()); //to make sure it is the last time the output change
 
         while(true){  //for time layer
-           if(arrival_time > _layerSize)break; 
+           if(arrival_time < time_constraint - slack + 1)break; 
            cerr<<"SAT from Layer "<<arrival_time<<endl;
             
            size_t InputSize = InputList[0].size();
@@ -125,15 +131,21 @@ void CirMgr::runsat(){
            for(size_t j = InputSize;j<InputSize+OutputSize;++j){  //for each output
               cout<<"from "<<WireList[arrival_time][j]->getId()<<endl;   
               Var newV = solver.newVar();
-              solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(), false, WireList[arrival_time-1][j]->getVar(), false);
+              Var newV2 = solver.newVar();
+              solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(), 
+                               false, WireList[arrival_time-1][j]->getVar(), false);
+              solver.addXorCNF(newV2, WireList[arrival_time][j]->getVar(),
+                               false, WireList[0][j]->getVar(), false);
               solver.assumeRelease();
               solver.assumeProperty(InputList[0][i]->getVar(),true);
               solver.assumeProperty(InputList[1][i]->getVar(),false);
               solver.assumeProperty(newV, true); //output change
+              solver.assumeProperty(newV2,true); //different from -inf
 
               bool isSat = solver.assumpSolve();
               // if is satisfiable
-              if(isSat){
+              if(isSat && !changed2[j-InputSize]){
+                  changed2[j-InputSize] = true;
                   cout<< "Start running DFS..."<<endl;
                   vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                   Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
@@ -146,7 +158,7 @@ void CirMgr::runsat(){
               }
             
            }
-           ++arrival_time;
+           --arrival_time;
         }
     }
 cout<<countpath<<endl;
@@ -344,7 +356,7 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
         }
 
     }
-    (*output_file)<<" }\n\n";
+    (*output_file)<<" }\n"<<endl;
 
 }
 

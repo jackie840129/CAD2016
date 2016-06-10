@@ -12,38 +12,6 @@ Header { A True Path Set }
  A[0]      (in)                      0                  0 r            
  U15/1     (nand)                    0                  0 r
  U15/Y     (nand)                    1                  1 f
- U13/0     (nor)                     0                  1 f
- U13/Y     (nor)                     1                  2 r
- U1/0      (not)                     0                  2 r
- U1/Y      (not)                     1                  3 f
- U12/1     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
- M[1]      (out)                     0                  4 r
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              4
- ---------------------------------------------------------------------------
- Slack                          6
- }
-
- Input Vector
- {
-   A[0]  =  r
-   A[1]  =  0
-   B[0]  =  0
-   B[1]  =  1
- }
-
- Path { 2 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- A[0]      (in)                      0                  0 r            
- U15/1     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
  U11/0     (nor)                     0                  1 f
  U11/Y     (nor)                     1                  2 f
  U3/0      (not)                     0                  2 f
@@ -68,23 +36,23 @@ Header { A True Path Set }
    B[1]  =  1
  }
 
- Path { 3 }
+ Path { 2 }
 
  A True Path List
  {
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- A[0]      (in)                      0                  0 f            
- U15/1     (nand)                    0                  0 f
- U15/Y     (nand)                    1                  1 r
- U13/0     (nor)                     0                  1 r
- U13/Y     (nor)                     1                  2 f
- U1/0      (not)                     0                  2 f
- U1/Y      (not)                     1                  3 r
- U12/1     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
- M[1]      (out)                     0                  4 f
+ A[0]      (in)                      0                  0 r            
+ U15/1     (nand)                    0                  0 r
+ U15/Y     (nand)                    1                  1 f
+ U13/0     (nor)                     0                  1 f
+ U13/Y     (nor)                     1                  2 r
+ U1/0      (not)                     0                  2 r
+ U1/Y      (not)                     1                  3 f
+ U12/1     (nand)                    0                  3 f
+ U12/Y     (nand)                    1                  4 r
+ M[1]      (out)                     0                  4 r
  ---------------------------------------------------------------------------
  Data Required Time            10
  Data Arrival Time              4
@@ -94,13 +62,13 @@ Header { A True Path Set }
 
  Input Vector
  {
-   A[0]  =  f
+   A[0]  =  r
    A[1]  =  0
    B[0]  =  0
    B[1]  =  1
  }
 
- Path { 4 }
+ Path { 3 }
 
  A True Path List
  {
@@ -134,23 +102,23 @@ Header { A True Path Set }
    B[1]  =  1
  }
 
- Path { 5 }
+ Path { 4 }
 
  A True Path List
  {
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- A[1]      (in)                      0                  0 r            
- U16/1     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U14/0     (nand)                    0                  2 r
- U14/Y     (nand)                    1                  3 f
- U12/0     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
- M[1]      (out)                     0                  4 r
+ A[0]      (in)                      0                  0 f            
+ U15/1     (nand)                    0                  0 f
+ U15/Y     (nand)                    1                  1 r
+ U13/0     (nor)                     0                  1 r
+ U13/Y     (nor)                     1                  2 f
+ U1/0      (not)                     0                  2 f
+ U1/Y      (not)                     1                  3 r
+ U12/1     (nand)                    0                  3 r
+ U12/Y     (nand)                    1                  4 f
+ M[1]      (out)                     0                  4 f
  ---------------------------------------------------------------------------
  Data Required Time            10
  Data Arrival Time              4
@@ -160,47 +128,13 @@ Header { A True Path Set }
 
  Input Vector
  {
-   A[0]  =  1
-   A[1]  =  r
-   B[0]  =  1
-   B[1]  =  0
+   A[0]  =  f
+   A[1]  =  0
+   B[0]  =  0
+   B[1]  =  1
  }
 
- Path { 6 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- A[1]      (in)                      0                  0 r            
- U16/1     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U11/1     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 f
- U9/1      (nor)                     0                  4 f
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              5
- ---------------------------------------------------------------------------
- Slack                          5
- }
-
- Input Vector
- {
-   A[0]  =  0
-   A[1]  =  r
-   B[0]  =  1
-   B[1]  =  0
- }
-
- Path { 7 }
+ Path { 5 }
 
  A True Path List
  {
@@ -234,39 +168,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 8 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- A[1]      (in)                      0                  0 f            
- U16/1     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U14/0     (nand)                    0                  2 f
- U14/Y     (nand)                    1                  3 r
- U12/0     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
- M[1]      (out)                     0                  4 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              4
- ---------------------------------------------------------------------------
- Slack                          6
- }
-
- Input Vector
- {
-   A[0]  =  0
-   A[1]  =  f
-   B[0]  =  1
-   B[1]  =  0
- }
-
- Path { 9 }
+ Path { 6 }
 
  A True Path List
  {
@@ -300,39 +202,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 10 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- B[0]      (in)                      0                  0 r            
- U16/0     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U14/0     (nand)                    0                  2 r
- U14/Y     (nand)                    1                  3 f
- U12/0     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
- M[1]      (out)                     0                  4 r
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              4
- ---------------------------------------------------------------------------
- Slack                          6
- }
-
- Input Vector
- {
-   A[0]  =  1
-   A[1]  =  1
-   B[0]  =  r
-   B[1]  =  0
- }
-
- Path { 11 }
+ Path { 7 }
 
  A True Path List
  {
@@ -366,7 +236,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 12 }
+ Path { 8 }
 
  A True Path List
  {
@@ -400,39 +270,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 13 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- B[0]      (in)                      0                  0 f            
- U16/0     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U14/0     (nand)                    0                  2 f
- U14/Y     (nand)                    1                  3 r
- U12/0     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
- M[1]      (out)                     0                  4 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              4
- ---------------------------------------------------------------------------
- Slack                          6
- }
-
- Input Vector
- {
-   A[0]  =  0
-   A[1]  =  1
-   B[0]  =  f
-   B[1]  =  0
- }
-
- Path { 14 }
+ Path { 9 }
 
  A True Path List
  {
@@ -466,7 +304,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 15 }
+ Path { 10 }
 
  A True Path List
  {
@@ -500,7 +338,7 @@ Header { A True Path Set }
    B[1]  =  0
  }
 
- Path { 16 }
+ Path { 11 }
 
  A True Path List
  {
@@ -532,41 +370,7 @@ Header { A True Path Set }
    B[1]  =  r
  }
 
- Path { 17 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- B[1]      (in)                      0                  0 r            
- U15/0     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
- U11/0     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 r
- U9/1      (nor)                     0                  4 r
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              5
- ---------------------------------------------------------------------------
- Slack                          5
- }
-
- Input Vector
- {
-   A[0]  =  1
-   A[1]  =  0
-   B[0]  =  0
-   B[1]  =  r
- }
-
- Path { 18 }
+ Path { 12 }
 
  A True Path List
  {
@@ -596,3 +400,5 @@ Header { A True Path Set }
    A[1]  =  0
    B[0]  =  0
    B[1]  =  f
+ }
+
