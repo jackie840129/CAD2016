@@ -76,7 +76,7 @@ void CirMgr::runsat(){
         //see outs , solve SAT
         size_t arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
 
-        vector<bool> changed(OutputList[0].size()); //to make sure it is the last time the output change
+        vector< bool > changed(OutputList[0].size()); //to make sure it is the last time the output change
         while(true){  //for time layer
             cout<<" *******************LayerSize: "<<_layerSize<<endl;
             if(arrival_time < time_constraint - slack +1 )break; 
