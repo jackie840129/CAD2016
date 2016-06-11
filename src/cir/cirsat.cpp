@@ -34,7 +34,7 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
     for(size_t i = 0;i<GateList.size();++i){
         for(size_t j = 0; j< GateList[i].size();++j){
             Gate* gate = GateList[i][j];
-            if(gate->getType()=="not"){
+            if(gate->getType()=="NOT1"){
                 Wire* fanout = gate->getFout();
                 if(gate->getFinSize()!=1){
                     cerr<<" not gate has more than one fanin!"<<endl;
@@ -42,7 +42,7 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
                 Wire* fanin = gate->getFin(0);
                 s.addNotCNF(fanout->getVar(),fanin->getVar());
             }
-            else if(gate->getType() == "nand"){
+            else if(gate->getType() == "NAND2"){
                 Wire* fanout = gate->getFout();
                 if(gate->getFinSize()!=2){
                     cerr<<" nand gate has error number of fanin!"<<endl;
@@ -51,7 +51,7 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
                 Wire* fanin2 = gate->getFin(1);
                 s.addNandCNF(fanout->getVar(),fanin1->getVar(),fanin2->getVar());
             }
-            else if(gate->getType() == "nor"){
+            else if(gate->getType() == "NOR2"){
                 Wire* fanout = gate->getFout();
                 if(gate->getFinSize()!=2){
                     cerr<<" nor gate has error number of fanin!"<<endl;
@@ -68,6 +68,7 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
 void CirMgr::runsat(){
     SatSolver solver;
     cout<<"Start running SAT..."<<endl;
+    time_constraint = time_constraint<_layerSize?time_constraint:_layerSize;
     for(size_t i = 0; i< InputList[0].size();++i){
         solver.initialize();
         genProofModel(solver, i);
@@ -90,13 +91,13 @@ void CirMgr::runsat(){
                 Var newV2 = solver.newVar();
                 solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(),
                                false, WireList[arrival_time-1][j]->getVar(), false);
-                solver.addXorCNF(newV2, WireList[arrival_time][j]->getVar(),
+                solver.addXorCNF(newV2, WireList[time_constraint][j]->getVar(),
                                false, WireList[0][j]->getVar(), false);
                 solver.assumeRelease();
                 solver.assumeProperty(InputList[0][i]->getVar(),false);
                 solver.assumeProperty(InputList[1][i]->getVar(),true);
                 solver.assumeProperty(newV, true); //output change
-              //  solver.assumeProperty(newV2, true);
+                solver.assumeProperty(newV2, true);
 
                 bool isSat = solver.assumpSolve();
               // if is satisfiable
@@ -267,7 +268,7 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
     string English = new_path[0]->getId().substr(0,1);
     string number =  new_path[0]->getId().substr(1);
     string rf = risefall?"r":"f";
-    string temp = English+"["+number+"]";
+    string temp = (number!="")?(English+"["+number+"]"):English;
     (*output_file)<<" ";
     (*output_file)<<setw(10)<<left<<temp;
     (*output_file)<<setw(25)<<left<<"(in)";
@@ -285,7 +286,7 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
             }
         }
         //here ↓↓↓↓↓↓↓↓
-        AB = whichwire == 0? "0":"1";
+        AB = whichwire == 0? "A":"B";
         temp = path_g[i]->getId()+"/"+AB;
         (*output_file)<<" ";
         (*output_file)<<setw(10)<<left<<temp;
@@ -311,7 +312,7 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
     English = new_path.back()->getId().substr(0,1);
     number =  new_path.back()->getId().substr(1);
     rf = solver.getValue(new_path.back()->getVar())?"r":"f";
-    temp = English+"["+number+"]";
+    temp = (number!="")?(English+"["+number+"]"):English;
     (*output_file)<<" ";
     (*output_file)<<setw(10)<<left<<temp;
     (*output_file)<<setw(25)<<left<<"(out)";
@@ -336,9 +337,10 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
 
     (*output_file)<<" Input Vector\n"<<" {"<<endl;
     for(size_t i = 0;i<InputList[1].size();++i){
-        char English = InputList[1][i]->getId()[0];
-        string number = InputList[1][i]->getId().substr(1); 
-        (*output_file)<<"   "<<English<<"["<<number<<"]  =  ";
+        English = InputList[1][i]->getId().substr(0,1);
+        number = InputList[1][i]->getId().substr(1); 
+        temp = (number!="")?(English+"["+number+"]"):English;
+        (*output_file)<<"   "<<temp<<"  =  ";
         if(i!=input_num){
             (*output_file)<<solver.getValue(InputList[1][i]->getVar())<<endl;
         }

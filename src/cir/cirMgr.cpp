@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 
 int global_dfsNum = 0;
 // int layerSize = 0;
@@ -47,7 +47,7 @@ void checkGate(Gate* gate){
 	else{
 		cerr<<"FanIn0 connected to Input "<<gate->getFin0()->getId()<<endl;
 	}
-	if(gate->getType()!="not"){
+	if(gate->getType()!="NOT1"){
 		if(gate->getFin1()->getFin()!=0){
 			Gate* gateIn1 = gate->getFin1()->getFin();
 			cerr<<"FanIn1 connected to Gate "<<gateIn1->getId()<<"("<<gateIn1->getType()<<")"<<endl;
@@ -303,9 +303,7 @@ void CirMgr::read_circuit(const string& file_name){
                     Wire* wire_out = new Wire(param[3]);
                     in0 = assignWire(wire_in,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in->addFoutSY("A");
-                    wire_out->addFoutSY("Y");
-					Gate* gate = new Gate("not", param[1], wire_in, 0, wire_out);
+					Gate* gate = new Gate("NOT1", param[1], wire_in, 0, wire_out);
                     setVNum(gate,out,in0);
 					GateList[0].push_back(gate);
                 }
@@ -314,9 +312,7 @@ void CirMgr::read_circuit(const string& file_name){
                     Wire* wire_out = new Wire(param[5]);
                     in0 = assignWire(wire_in,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in->addFoutSY("A");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("not", param[1], wire_in, 0, wire_out);
+                    Gate* gate = new Gate("NOT1", param[1], wire_in, 0, wire_out);
                     setVNum(gate,out,in0);
                     GateList[0].push_back(gate);
                 }
@@ -329,10 +325,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NOR2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -343,10 +336,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NOR2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -357,10 +347,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nor", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NOR2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -373,10 +360,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NAND2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -387,10 +371,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NAND2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -401,10 +382,7 @@ void CirMgr::read_circuit(const string& file_name){
                     in0 = assignWire(wire_in1,WireList[0]);
                     in1 = assignWire(wire_in2,WireList[0]);
                     out = assignWire(wire_out,WireList[0]);
-                    wire_in1->addFoutSY("A");
-                    wire_in2->addFoutSY("B");
-                    wire_out->addFoutSY("Y");
-                    Gate* gate = new Gate("nand", param[1], wire_in1, wire_in2, wire_out);
+                    Gate* gate = new Gate("NAND2", param[1], wire_in1, wire_in2, wire_out);
                     setVNum(gate,out,in0,in1);
                     GateList[0].push_back(gate);
                 }
@@ -471,26 +449,22 @@ void CirMgr::multi_Layer(size_t Layer=0){
 			if(in0<(int)inputSize){
 				gate->setFin0(InputList[1][in0]);
 				InputList[1][in0]->addFout(gate);
-                InputList[1][in0]->addFoutSY("A");
 			}
 			else{
 				gate->setFin0(WireList[i][in0]);
 				WireList[i][in0]->addFout(gate);
-                WireList[i][in0]->addFoutSY("A");
 			}
 			gate->setFout(currentWireList[out]);
 			currentWireList[out]->setFin(gate);
-			if(gate->getType()!="not"){
+			if(gate->getType()!="NOT1"){
 				in1 = GateList[i][j]->getFin1VecNum();
 				if(in1<(int)inputSize){
 					gate->setFin1(InputList[1][in1]);
 					InputList[1][in1]->addFout(gate);
-					InputList[1][in1]->addFoutSY("B");
 				}
 				else{
 					gate->setFin1(WireList[i][in1]);
 					WireList[i][in1]->addFout(gate);
-					WireList[i][in1]->addFoutSY("B");
 				}
                 setVNum(gate,out,in0,in1);
 			}

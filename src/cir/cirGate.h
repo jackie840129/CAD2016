@@ -22,9 +22,7 @@ class Wire{
 		Gate* getFin(){return _fin;}
 		void setFin(Gate* g){_fin=g;}
 		vector<Gate *> getFout(){return _fout;}
-        vector<string> getfoutSY(){return _foutSY;}
 		void addFout(Gate * g){_fout.push_back(g);}
-        void addFoutSY(string s){_foutSY.push_back(s);}
 		//void 
 		bool getValue(){return _value;}
 		void setValue(bool b){_value = b;}
@@ -43,7 +41,6 @@ class Wire{
 	private:
 		Gate* _fin;
 		vector<Gate *> _fout;
-        vector<string> _foutSY;
 		bool _value;
 		bool _isTF;
         int _dfsCheck;
@@ -113,7 +110,7 @@ class Gate{
 		int getFoutVecNum(){return _foutVecNum;}
 		int getFin0VecNum(){return _finVecNum[0];}
 		int getFin1VecNum(){
-			if(_type !="not")
+			if(_type !="NOT1")
 				return _finVecNum[1];
 			else{
 				cerr<<"FATAL ERROR!! (in getFin1VecNum)"<<endl;

@@ -10,16 +10,16 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[0]      (in)                      0                  0 r            
- U15/1     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
- U11/0     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 r
- U9/1      (nor)                     0                  4 r
- U9/Y      (nor)                     1                  5 f
+ U15/B     (NAND2)                   0                  0 r
+ U15/Y     (NAND2)                   1                  1 f
+ U11/A     (NOR2)                    0                  1 f
+ U11/Y     (NOR2)                    1                  2 f
+ U3/A      (NOT1)                    0                  2 f
+ U3/Y      (NOT1)                    1                  3 r
+ U10/B     (NAND2)                   0                  3 r
+ U10/Y     (NAND2)                   1                  4 r
+ U9/B      (NOR2)                    0                  4 r
+ U9/Y      (NOR2)                    1                  5 f
  M[2]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
@@ -44,14 +44,14 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[0]      (in)                      0                  0 r            
- U15/1     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
- U13/0     (nor)                     0                  1 f
- U13/Y     (nor)                     1                  2 r
- U1/0      (not)                     0                  2 r
- U1/Y      (not)                     1                  3 f
- U12/1     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
+ U15/B     (NAND2)                   0                  0 r
+ U15/Y     (NAND2)                   1                  1 f
+ U13/A     (NOR2)                    0                  1 f
+ U13/Y     (NOR2)                    1                  2 r
+ U1/A      (NOT1)                    0                  2 r
+ U1/Y      (NOT1)                    1                  3 f
+ U12/B     (NAND2)                   0                  3 f
+ U12/Y     (NAND2)                   1                  4 r
  M[1]      (out)                     0                  4 r
  ---------------------------------------------------------------------------
  Data Required Time            10
@@ -76,16 +76,16 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[0]      (in)                      0                  0 f            
- U15/1     (nand)                    0                  0 f
- U15/Y     (nand)                    1                  1 r
- U11/0     (nor)                     0                  1 r
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 r
- U9/1      (nor)                     0                  4 r
- U9/Y      (nor)                     1                  5 f
+ U15/B     (NAND2)                   0                  0 f
+ U15/Y     (NAND2)                   1                  1 r
+ U11/A     (NOR2)                    0                  1 r
+ U11/Y     (NOR2)                    1                  2 f
+ U3/A      (NOT1)                    0                  2 f
+ U3/Y      (NOT1)                    1                  3 r
+ U10/B     (NAND2)                   0                  3 r
+ U10/Y     (NAND2)                   1                  4 r
+ U9/B      (NOR2)                    0                  4 r
+ U9/Y      (NOR2)                    1                  5 f
  M[2]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
@@ -110,14 +110,14 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[0]      (in)                      0                  0 f            
- U15/1     (nand)                    0                  0 f
- U15/Y     (nand)                    1                  1 r
- U13/0     (nor)                     0                  1 r
- U13/Y     (nor)                     1                  2 f
- U1/0      (not)                     0                  2 f
- U1/Y      (not)                     1                  3 r
- U12/1     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
+ U15/B     (NAND2)                   0                  0 f
+ U15/Y     (NAND2)                   1                  1 r
+ U13/A     (NOR2)                    0                  1 r
+ U13/Y     (NOR2)                    1                  2 f
+ U1/A      (NOT1)                    0                  2 f
+ U1/Y      (NOT1)                    1                  3 r
+ U12/B     (NAND2)                   0                  3 r
+ U12/Y     (NAND2)                   1                  4 f
  M[1]      (out)                     0                  4 f
  ---------------------------------------------------------------------------
  Data Required Time            10
@@ -142,17 +142,17 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[1]      (in)                      0                  0 r            
- U16/1     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U11/1     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 f
- U9/1      (nor)                     0                  4 f
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
+ U16/B     (NAND2)                   0                  0 r
+ U16/Y     (NAND2)                   1                  1 f
+ U2/A      (NOT1)                    0                  1 f
+ U2/Y      (NOT1)                    1                  2 r
+ U13/B     (NOR2)                    0                  2 r
+ U13/Y     (NOR2)                    1                  3 f
+ U1/A      (NOT1)                    0                  3 f
+ U1/Y      (NOT1)                    1                  4 r
+ U12/B     (NAND2)                   0                  4 r
+ U12/Y     (NAND2)                   1                  5 r
+ M[1]      (out)                     0                  5 r
  ---------------------------------------------------------------------------
  Data Required Time            10
  Data Arrival Time              5
@@ -176,22 +176,20 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[1]      (in)                      0                  0 r            
- U16/1     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U13/1     (nor)                     0                  2 r
- U13/Y     (nor)                     1                  3 f
- U1/0      (not)                     0                  3 f
- U1/Y      (not)                     1                  4 r
- U12/1     (nand)                    0                  4 r
- U12/Y     (nand)                    1                  5 r
- M[1]      (out)                     0                  5 r
+ U16/B     (NAND2)                   0                  0 r
+ U16/Y     (NAND2)                   1                  1 f
+ U2/A      (NOT1)                    0                  1 f
+ U2/Y      (NOT1)                    1                  2 r
+ U14/A     (NAND2)                   0                  2 r
+ U14/Y     (NAND2)                   1                  3 f
+ U12/A     (NAND2)                   0                  3 f
+ U12/Y     (NAND2)                   1                  4 r
+ M[1]      (out)                     0                  4 r
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              5
+ Data Arrival Time              4
  ---------------------------------------------------------------------------
- Slack                          5
+ Slack                          6
  }
 
  Input Vector
@@ -209,27 +207,29 @@ Header { A True Path Set }
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- A[1]      (in)                      0                  0 r            
- U16/1     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U14/0     (nand)                    0                  2 r
- U14/Y     (nand)                    1                  3 f
- U12/0     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
- M[1]      (out)                     0                  4 r
+ A[1]      (in)                      0                  0 f            
+ U16/B     (NAND2)                   0                  0 f
+ U16/Y     (NAND2)                   1                  1 r
+ U2/A      (NOT1)                    0                  1 r
+ U2/Y      (NOT1)                    1                  2 f
+ U13/B     (NOR2)                    0                  2 f
+ U13/Y     (NOR2)                    1                  3 f
+ U1/A      (NOT1)                    0                  3 f
+ U1/Y      (NOT1)                    1                  4 r
+ U12/B     (NAND2)                   0                  4 r
+ U12/Y     (NAND2)                   1                  5 f
+ M[1]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              4
+ Data Arrival Time              5
  ---------------------------------------------------------------------------
- Slack                          6
+ Slack                          5
  }
 
  Input Vector
  {
    A[0]  =  0
-   A[1]  =  r
+   A[1]  =  f
    B[0]  =  1
    B[1]  =  0
  }
@@ -242,22 +242,20 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  A[1]      (in)                      0                  0 f            
- U16/1     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U13/1     (nor)                     0                  2 f
- U13/Y     (nor)                     1                  3 f
- U1/0      (not)                     0                  3 f
- U1/Y      (not)                     1                  4 r
- U12/1     (nand)                    0                  4 r
- U12/Y     (nand)                    1                  5 f
- M[1]      (out)                     0                  5 f
+ U16/B     (NAND2)                   0                  0 f
+ U16/Y     (NAND2)                   1                  1 r
+ U2/A      (NOT1)                    0                  1 r
+ U2/Y      (NOT1)                    1                  2 f
+ U14/A     (NAND2)                   0                  2 f
+ U14/Y     (NAND2)                   1                  3 r
+ U12/A     (NAND2)                   0                  3 r
+ U12/Y     (NAND2)                   1                  4 f
+ M[1]      (out)                     0                  4 f
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              5
+ Data Arrival Time              4
  ---------------------------------------------------------------------------
- Slack                          5
+ Slack                          6
  }
 
  Input Vector
@@ -275,28 +273,30 @@ Header { A True Path Set }
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- A[1]      (in)                      0                  0 f            
- U16/1     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U14/0     (nand)                    0                  2 f
- U14/Y     (nand)                    1                  3 r
- U12/0     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
- M[1]      (out)                     0                  4 f
+ B[0]      (in)                      0                  0 r            
+ U16/A     (NAND2)                   0                  0 r
+ U16/Y     (NAND2)                   1                  1 f
+ U11/B     (NOR2)                    0                  1 f
+ U11/Y     (NOR2)                    1                  2 f
+ U3/A      (NOT1)                    0                  2 f
+ U3/Y      (NOT1)                    1                  3 r
+ U10/B     (NAND2)                   0                  3 r
+ U10/Y     (NAND2)                   1                  4 f
+ U9/B      (NOR2)                    0                  4 f
+ U9/Y      (NOR2)                    1                  5 f
+ M[2]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              4
+ Data Arrival Time              5
  ---------------------------------------------------------------------------
- Slack                          6
+ Slack                          5
  }
 
  Input Vector
  {
    A[0]  =  0
-   A[1]  =  f
-   B[0]  =  1
+   A[1]  =  1
+   B[0]  =  r
    B[1]  =  0
  }
 
@@ -308,17 +308,17 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  B[0]      (in)                      0                  0 r            
- U16/0     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U11/1     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 f
- U9/1      (nor)                     0                  4 f
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
+ U16/A     (NAND2)                   0                  0 r
+ U16/Y     (NAND2)                   1                  1 f
+ U2/A      (NOT1)                    0                  1 f
+ U2/Y      (NOT1)                    1                  2 r
+ U13/B     (NOR2)                    0                  2 r
+ U13/Y     (NOR2)                    1                  3 f
+ U1/A      (NOT1)                    0                  3 f
+ U1/Y      (NOT1)                    1                  4 r
+ U12/B     (NAND2)                   0                  4 r
+ U12/Y     (NAND2)                   1                  5 r
+ M[1]      (out)                     0                  5 r
  ---------------------------------------------------------------------------
  Data Required Time            10
  Data Arrival Time              5
@@ -342,22 +342,20 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  B[0]      (in)                      0                  0 r            
- U16/0     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U13/1     (nor)                     0                  2 r
- U13/Y     (nor)                     1                  3 f
- U1/0      (not)                     0                  3 f
- U1/Y      (not)                     1                  4 r
- U12/1     (nand)                    0                  4 r
- U12/Y     (nand)                    1                  5 r
- M[1]      (out)                     0                  5 r
+ U16/A     (NAND2)                   0                  0 r
+ U16/Y     (NAND2)                   1                  1 f
+ U2/A      (NOT1)                    0                  1 f
+ U2/Y      (NOT1)                    1                  2 r
+ U14/A     (NAND2)                   0                  2 r
+ U14/Y     (NAND2)                   1                  3 f
+ U12/A     (NAND2)                   0                  3 f
+ U12/Y     (NAND2)                   1                  4 r
+ M[1]      (out)                     0                  4 r
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              5
+ Data Arrival Time              4
  ---------------------------------------------------------------------------
- Slack                          5
+ Slack                          6
  }
 
  Input Vector
@@ -375,28 +373,30 @@ Header { A True Path Set }
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- B[0]      (in)                      0                  0 r            
- U16/0     (nand)                    0                  0 r
- U16/Y     (nand)                    1                  1 f
- U2/0      (not)                     0                  1 f
- U2/Y      (not)                     1                  2 r
- U14/0     (nand)                    0                  2 r
- U14/Y     (nand)                    1                  3 f
- U12/0     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
- M[1]      (out)                     0                  4 r
+ B[0]      (in)                      0                  0 f            
+ U16/A     (NAND2)                   0                  0 f
+ U16/Y     (NAND2)                   1                  1 r
+ U11/B     (NOR2)                    0                  1 r
+ U11/Y     (NOR2)                    1                  2 f
+ U3/A      (NOT1)                    0                  2 f
+ U3/Y      (NOT1)                    1                  3 r
+ U10/B     (NAND2)                   0                  3 r
+ U10/Y     (NAND2)                   1                  4 f
+ U9/B      (NOR2)                    0                  4 f
+ U9/Y      (NOR2)                    1                  5 f
+ M[2]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              4
+ Data Arrival Time              5
  ---------------------------------------------------------------------------
- Slack                          6
+ Slack                          5
  }
 
  Input Vector
  {
    A[0]  =  0
    A[1]  =  1
-   B[0]  =  r
+   B[0]  =  f
    B[1]  =  0
  }
 
@@ -408,17 +408,17 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  B[0]      (in)                      0                  0 f            
- U16/0     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U11/1     (nor)                     0                  1 r
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 f
- U9/1      (nor)                     0                  4 f
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
+ U16/A     (NAND2)                   0                  0 f
+ U16/Y     (NAND2)                   1                  1 r
+ U2/A      (NOT1)                    0                  1 r
+ U2/Y      (NOT1)                    1                  2 f
+ U13/B     (NOR2)                    0                  2 f
+ U13/Y     (NOR2)                    1                  3 f
+ U1/A      (NOT1)                    0                  3 f
+ U1/Y      (NOT1)                    1                  4 r
+ U12/B     (NAND2)                   0                  4 r
+ U12/Y     (NAND2)                   1                  5 f
+ M[1]      (out)                     0                  5 f
  ---------------------------------------------------------------------------
  Data Required Time            10
  Data Arrival Time              5
@@ -442,22 +442,20 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  B[0]      (in)                      0                  0 f            
- U16/0     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U13/1     (nor)                     0                  2 f
- U13/Y     (nor)                     1                  3 f
- U1/0      (not)                     0                  3 f
- U1/Y      (not)                     1                  4 r
- U12/1     (nand)                    0                  4 r
- U12/Y     (nand)                    1                  5 f
- M[1]      (out)                     0                  5 f
+ U16/A     (NAND2)                   0                  0 f
+ U16/Y     (NAND2)                   1                  1 r
+ U2/A      (NOT1)                    0                  1 r
+ U2/Y      (NOT1)                    1                  2 f
+ U14/A     (NAND2)                   0                  2 f
+ U14/Y     (NAND2)                   1                  3 r
+ U12/A     (NAND2)                   0                  3 r
+ U12/Y     (NAND2)                   1                  4 f
+ M[1]      (out)                     0                  4 f
  ---------------------------------------------------------------------------
  Data Required Time            10
- Data Arrival Time              5
+ Data Arrival Time              4
  ---------------------------------------------------------------------------
- Slack                          5
+ Slack                          6
  }
 
  Input Vector
@@ -475,81 +473,15 @@ Header { A True Path Set }
  ---------------------------------------------------------------------------
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
- B[0]      (in)                      0                  0 f            
- U16/0     (nand)                    0                  0 f
- U16/Y     (nand)                    1                  1 r
- U2/0      (not)                     0                  1 r
- U2/Y      (not)                     1                  2 f
- U14/0     (nand)                    0                  2 f
- U14/Y     (nand)                    1                  3 r
- U12/0     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
- M[1]      (out)                     0                  4 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              4
- ---------------------------------------------------------------------------
- Slack                          6
- }
-
- Input Vector
- {
-   A[0]  =  0
-   A[1]  =  1
-   B[0]  =  f
-   B[1]  =  0
- }
-
- Path { 16 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
  B[1]      (in)                      0                  0 r            
- U15/0     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
- U11/0     (nor)                     0                  1 f
- U11/Y     (nor)                     1                  2 f
- U3/0      (not)                     0                  2 f
- U3/Y      (not)                     1                  3 r
- U10/1     (nand)                    0                  3 r
- U10/Y     (nand)                    1                  4 r
- U9/1      (nor)                     0                  4 r
- U9/Y      (nor)                     1                  5 f
- M[2]      (out)                     0                  5 f
- ---------------------------------------------------------------------------
- Data Required Time            10
- Data Arrival Time              5
- ---------------------------------------------------------------------------
- Slack                          5
- }
-
- Input Vector
- {
-   A[0]  =  1
-   A[1]  =  0
-   B[0]  =  0
-   B[1]  =  r
- }
-
- Path { 17 }
-
- A True Path List
- {
- ---------------------------------------------------------------------------
- Pin       type                     Incr                Path delay     
- ---------------------------------------------------------------------------
- B[1]      (in)                      0                  0 r            
- U15/0     (nand)                    0                  0 r
- U15/Y     (nand)                    1                  1 f
- U13/0     (nor)                     0                  1 f
- U13/Y     (nor)                     1                  2 r
- U1/0      (not)                     0                  2 r
- U1/Y      (not)                     1                  3 f
- U12/1     (nand)                    0                  3 f
- U12/Y     (nand)                    1                  4 r
+ U15/A     (NAND2)                   0                  0 r
+ U15/Y     (NAND2)                   1                  1 f
+ U13/A     (NOR2)                    0                  1 f
+ U13/Y     (NOR2)                    1                  2 r
+ U1/A      (NOT1)                    0                  2 r
+ U1/Y      (NOT1)                    1                  3 f
+ U12/B     (NAND2)                   0                  3 f
+ U12/Y     (NAND2)                   1                  4 r
  M[1]      (out)                     0                  4 r
  ---------------------------------------------------------------------------
  Data Required Time            10
@@ -566,7 +498,7 @@ Header { A True Path Set }
    B[1]  =  r
  }
 
- Path { 18 }
+ Path { 16 }
 
  A True Path List
  {
@@ -574,14 +506,14 @@ Header { A True Path Set }
  Pin       type                     Incr                Path delay     
  ---------------------------------------------------------------------------
  B[1]      (in)                      0                  0 f            
- U15/0     (nand)                    0                  0 f
- U15/Y     (nand)                    1                  1 r
- U13/0     (nor)                     0                  1 r
- U13/Y     (nor)                     1                  2 f
- U1/0      (not)                     0                  2 f
- U1/Y      (not)                     1                  3 r
- U12/1     (nand)                    0                  3 r
- U12/Y     (nand)                    1                  4 f
+ U15/A     (NAND2)                   0                  0 f
+ U15/Y     (NAND2)                   1                  1 r
+ U13/A     (NOR2)                    0                  1 r
+ U13/Y     (NOR2)                    1                  2 f
+ U1/A      (NOT1)                    0                  2 f
+ U1/Y      (NOT1)                    1                  3 r
+ U12/B     (NAND2)                   0                  3 r
+ U12/Y     (NAND2)                   1                  4 f
  M[1]      (out)                     0                  4 f
  ---------------------------------------------------------------------------
  Data Required Time            10

@@ -11,7 +11,7 @@ CirMgr* cirMgr = 0;
 int main(int argc, char**argv){
     
     cirMgr = new CirMgr();
-    string file1 = "PD_case/case3/input/cadcontest.v";
+    string file1 = "PD_case/case0/input/cadcontest.v";
     cirMgr->read_module(file1);
     string file2 = "PD_case/case0/input/case0";
     cirMgr->read_circuit(file2);
@@ -22,11 +22,11 @@ int main(int argc, char**argv){
   
     cirMgr->run_DFS();
     //cirMgr->print_DFS();
- //   string file3 = "PD_case/case0/input/case0.sdc";
- //   cirMgr->read_timeconstraint(file3);
-    cirMgr->settime_constraint(10);
+    string file3 = "PD_case/case0/input/case0.sdc";
+    cirMgr->read_timeconstraint(file3);
+    //cirMgr->settime_constraint(31);
     cirMgr->setLayerSize(cirMgr->get_time_constraint());
-
+    cout<<cirMgr->getLayerSize()<<endl;
     cout << "Check assign slack in Makefile: "<<slack<<endl;
 	cirMgr->multi_Layer(cirMgr->getLayerSize());    
 
