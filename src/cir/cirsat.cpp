@@ -67,9 +67,9 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
 }
 void CirMgr::runsat(){
     SatSolver solver;
-    solver.initialize();
     cout<<"Start running SAT..."<<endl;
     for(size_t i = 0; i< InputList[0].size();++i){
+        solver.initialize();
         genProofModel(solver, i);
         //做兩次  0->1  & 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 0 to 1, start SAT..."<<endl;
@@ -262,14 +262,6 @@ void CirMgr::outputPath(SatSolver& solver, vector<Wire*> path,int input_num,bool
         new_path.push_back(path[i]);
         if(i == 0)break;
     }
-    /*
-    (*output_file)<<new_path[0]->getId()<<" ";
-    for(size_t i =0;i<path_g.size();++i){
-        (*output_file)<<path_g[i]->getId()<<" ";
-        (*output_file)<<new_path[i+1]->getId()<<" ";
-    }
-    (*output_file)<<endl;
-    */
     //output input~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     int delay=0;
     string English = new_path[0]->getId().substr(0,1);
