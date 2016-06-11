@@ -79,12 +79,12 @@ void CirMgr::DFS_Visit(Wire* wire, vector<Wire*> &dfsOrder, int& depth){
     size_t finSize = wire->getFin()->getFinSize();
     for(size_t i=0 ; i<finSize ; ++i){
         Wire* w = wire->getFin()->getFin(i);
-        if(w->getdfsCheck()!=global_dfsNum){
+        //if(w->getdfsCheck()!=global_dfsNum){
             depth += 1; 
             DFS_Visit(w,dfsOrder, depth);
 			depth -= 1;
             dfsOrder.push_back(w);
-        }
+        //}
     }
     return;
 }
