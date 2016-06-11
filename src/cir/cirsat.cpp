@@ -76,7 +76,7 @@ void CirMgr::runsat(){
         //see outs , solve SAT
         size_t arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
 
-        vector< bool > changed(OutputList[0].size()); //to make sure it is the last time the output change
+       // vector< bool > changed(OutputList[0].size()); //to make sure it is the last time the output change
         while(true){  //for time layer
             cout<<" *******************LayerSize: "<<_layerSize<<endl;
             if(arrival_time < time_constraint - slack +1 )break; 
@@ -96,12 +96,12 @@ void CirMgr::runsat(){
                 solver.assumeProperty(InputList[0][i]->getVar(),false);
                 solver.assumeProperty(InputList[1][i]->getVar(),true);
                 solver.assumeProperty(newV, true); //output change
-                solver.assumeProperty(newV2,true);
+              //  solver.assumeProperty(newV2, true);
 
                 bool isSat = solver.assumpSolve();
               // if is satisfiable
-                if(isSat && !changed[j-InputSize]){
-                    changed[j-InputSize] = true;
+                if(isSat ){
+         //           changed[j-InputSize] = true;
                     cout<< "Start running DFS..."<<endl;
                     vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                     Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
@@ -120,7 +120,7 @@ void CirMgr::runsat(){
         //see outs , solve SAT
         arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
 
-        vector<bool> changed2(OutputList[0].size()); //to make sure it is the last time the output change
+//        vector<bool> changed2(OutputList[0].size()); //to make sure it is the last time the output change
 
         while(true){  //for time layer
            if(arrival_time < time_constraint - slack + 1)break; 
@@ -140,12 +140,12 @@ void CirMgr::runsat(){
               solver.assumeProperty(InputList[0][i]->getVar(),true);
               solver.assumeProperty(InputList[1][i]->getVar(),false);
               solver.assumeProperty(newV, true); //output change
-              solver.assumeProperty(newV2,true); //different from -inf
+         //     solver.assumeProperty(newV2,true); //different from -inf
 
               bool isSat = solver.assumpSolve();
               // if is satisfiable
-              if(isSat && !changed2[j-InputSize]){
-                  changed2[j-InputSize] = true;
+              if(isSat ){
+               //   changed2[j-InputSize] = true;
                   cout<< "Start running DFS..."<<endl;
                   vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                   Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
