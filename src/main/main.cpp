@@ -18,8 +18,9 @@ int main(int argc, char**argv){
     cirMgr->set_inputfile("case0");
    // cirMgr->print_information();
   //  cirMgr->print_io();
+
   
-    //cirMgr->run_DFS();
+    cirMgr->run_DFS();
     //cirMgr->print_DFS();
     //string file3 = "PD_case/case3/input/case3.sdc";
     //cirMgr->read_timeconstraint(file3);
