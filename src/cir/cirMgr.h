@@ -63,7 +63,7 @@ class CirMgr{
         void print_information();
         void genProofModel(SatSolver&, int);
         void runsat();
-        void DFS_sat(SatSolver& s, Wire* o, size_t t, vector<Wire*> path, int i, bool RF);
+        void DFS_sat(SatSolver& s, Wire* o, size_t t, vector<Wire*> path, int i, bool RF, Wire* changed_output, int changed);
         void outputPath(SatSolver& s, vector<Wire*> path,int input_num,bool risefall);
 		// GET SET LAYERSIZE
 		void setLayerSize(int l){ _layerSize = l; }
@@ -73,7 +73,7 @@ class CirMgr{
     private :
         string input_file;
         ofstream* output_file;
-        int time_constraint;
+        size_t time_constraint;
 		int _layerSize;
         vector< vector<Wire*> > InputList;
         vector< vector<Wire*> > OutputList;

@@ -6,7 +6,7 @@
 int countpath = 0;
 void CirMgr::genProofModel(SatSolver& s, int inputIndex){
     for(size_t i = 0;i<InputList[0].size();++i){
-        if(i==inputIndex){
+        if(i==unsigned(inputIndex)){
             Var v1 = s.newVar();
             Var v2 = s.newVar();
             InputList[0][i]->setVar(v1);
@@ -98,7 +98,7 @@ void CirMgr::runsat(){
                 solver.assumeProperty(InputList[0][i]->getVar(),false);
                 solver.assumeProperty(InputList[1][i]->getVar(),true);
                 solver.assumeProperty(newV, true); //output change
-                solver.assumeProperty(newV2, true);
+               // solver.assumeProperty(newV2, true);
 
                 bool isSat = solver.assumpSolve();
                 //if is satisfiable
@@ -107,10 +107,10 @@ void CirMgr::runsat(){
                     cout<< "Start running DFS..."<<endl;
                     vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                     Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
-                    DFS_sat(solver, fanin1_wire, arrival_time-1, path, i, true);
+                    DFS_sat(solver, fanin1_wire, arrival_time-1, path, i, true, WireList[arrival_time][j], arrival_time);
                     if(WireList[arrival_time][j]->getFin()->getFinSize()==2){
                         Wire* fanin2_wire = WireList[arrival_time][j]->getFin()->getFin1();
-                        DFS_sat(solver, fanin2_wire, arrival_time-1, path, i, true);
+                        DFS_sat(solver, fanin2_wire, arrival_time-1, path, i, true, WireList[arrival_time][j], arrival_time);
                     }
                 }
             
@@ -142,7 +142,7 @@ void CirMgr::runsat(){
               solver.assumeProperty(InputList[0][i]->getVar(),true);
               solver.assumeProperty(InputList[1][i]->getVar(),false);
               solver.assumeProperty(newV, true); //output change
-              solver.assumeProperty(newV2,true); //different from -inf
+         //     solver.assumeProperty(newV2,true); //different from -inf
 
               bool isSat = solver.assumpSolve();
               // if is satisfiable
@@ -151,10 +151,10 @@ void CirMgr::runsat(){
                   cout<< "Start running DFS..."<<endl;
                   vector<Wire*> path; path.push_back(WireList[arrival_time][j]);
                   Wire* fanin1_wire = WireList[arrival_time][j]->getFin()->getFin0(); // fanin is in previous layer
-                  DFS_sat(solver, fanin1_wire, arrival_time-1, path, i, false);
+                  DFS_sat(solver, fanin1_wire, arrival_time-1, path, i, false, WireList[arrival_time][j], arrival_time);
                   if(WireList[arrival_time][j]->getFin()->getFinSize()==2){
                       Wire* fanin2_wire = WireList[arrival_time][j]->getFin()->getFin1();
-                      DFS_sat(solver, fanin2_wire, arrival_time-1, path, i, false);
+                      DFS_sat(solver, fanin2_wire, arrival_time-1, path, i, false, WireList[arrival_time][j], arrival_time);
                   }
 
               }
@@ -168,7 +168,7 @@ cout<<countpath<<endl;
 
 
 
-void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path, int input_num, bool RiseFall){
+void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path, int input_num, bool RiseFall, Wire* change_ouput, int change_time){
     // check if it is satisfiable with previous layer
  //   cout<<"Wire "<<o->getId()<<" at layer: "<<time<<endl;
     Var newV = solver.newVar();
@@ -183,7 +183,16 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
         solver.assumeProperty(InputList[0][input_num]->getVar(),true);
         solver.assumeProperty(InputList[1][input_num]->getVar(),false);
     }
+    Var newV1 = solver.newVar();
+    Var newV2 = solver.newVar();
+    solver.addXorCNF(newV1, change_ouput->getVar(), 
+        false, WireList[change_time-1][change_ouput->getListNum()]->getVar(), false);
+ //   solver.addXorCNF(newV2, stable->getVar(),
+   //     false, WireList[0][stable->getListNum()]->getVar(), false);
+
     solver.assumeProperty(newV, true);
+    solver.assumeProperty(newV1, true);
+    solver.assumeProperty(newV2, true);
 
     bool isSat = solver.assumpSolve();
     if(isSat){
@@ -192,10 +201,10 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
 
         if(time > 1 && o->getFin()!=0){ //not the bottom layer and not the PI
             Wire* fanin1_wire = o->getFin()->getFin0();
-            DFS_sat(solver, fanin1_wire, time-1, path, input_num, RiseFall);// fanin in previous layers 
+            DFS_sat(solver, fanin1_wire, time-1, path, input_num, RiseFall, change_ouput, change_time);// fanin in previous layers 
             if(o->getFin()->getFinSize()==2){
                 Wire* fanin2_wire = o->getFin()->getFin1();
-                DFS_sat(solver, fanin2_wire, time-1, path, input_num, RiseFall);
+                DFS_sat(solver, fanin2_wire, time-1, path, input_num, RiseFall, change_ouput, change_time);
             }
         }
         //if it is PI or bottom layer
