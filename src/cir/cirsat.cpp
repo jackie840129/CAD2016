@@ -135,13 +135,13 @@ void CirMgr::runsat(){
               Var newV2 = solver.newVar();
               solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(), 
                                false, WireList[arrival_time-1][j]->getVar(), false);
-              solver.addXorCNF(newV2, WireList[arrival_time][j]->getVar(),
+              solver.addXorCNF(newV2, WireList[time_constraint][j]->getVar(),
                                false, WireList[0][j]->getVar(), false);
               solver.assumeRelease();
               solver.assumeProperty(InputList[0][i]->getVar(),true);
               solver.assumeProperty(InputList[1][i]->getVar(),false);
               solver.assumeProperty(newV, true); //output change
-         //     solver.assumeProperty(newV2,true); //different from -inf
+              solver.assumeProperty(newV2,true); //different from -inf
 
               bool isSat = solver.assumpSolve();
               // if is satisfiable
