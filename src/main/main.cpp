@@ -25,7 +25,7 @@ int main(int argc, char**argv){
     string file3 = "PD_case/case0/input/case0.sdc";
     cirMgr->read_timeconstraint(file3);
     //cirMgr->settime_constraint(31);
-    cirMgr->setLayerSize(cirMgr->get_time_constraint());
+    //cirMgr->setLayerSize(cirMgr->get_time_constraint());
     cout<<cirMgr->getLayerSize()<<endl;
     cout << "Check assign slack in Makefile: "<<slack<<endl;
 	cirMgr->multi_Layer(cirMgr->getLayerSize());    

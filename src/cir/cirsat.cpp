@@ -68,22 +68,16 @@ void CirMgr::genProofModel(SatSolver& s, int inputIndex){
 void CirMgr::runsat(){
     SatSolver solver;
     cout<<"Start running SAT..."<<endl;
-    time_constraint = time_constraint<_layerSize?time_constraint:_layerSize;
+    size_t small = time_constraint<_layerSize?time_constraint:_layerSize;
+    cout<<"in sat's time_constraint "<<time_constraint<<endl;
     for(size_t i = 0; i< InputList[0].size();++i){
         solver.initialize();
         genProofModel(solver, i);
         //做兩次  0->1  & 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 0 to 1, start SAT..."<<endl;
         //see outs , solve SAT
-        size_t arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
+        size_t arrival_time = small   ; //find the path >slack, one for t=0 ->-inf,
         
-        size_t InputSize = InputList[0].size();
-        size_t OutputSize = OutputList[0].size();
-        Var newV2 = solver.newVar();
-        for(size_t j = InputSize;j<InputSize+OutputSize;++j){
-            solver.addXorCNF(newV2, WireList[time_constraint][j]->getVar(),
-                               false, WireList[0][j]->getVar(), false);
-        }
        // vector< bool > changed(OutputList[0].size()); //to make sure it is the last time the output change
         while(true){  //for time layer
             cout<<" *******************LayerSize: "<<_layerSize<<endl;
@@ -95,11 +89,11 @@ void CirMgr::runsat(){
             for(size_t j = InputSize;j<InputSize+OutputSize;++j){  //for each output
                 cout<<"from "<<WireList[arrival_time][j]->getId()<<endl;   
                 Var newV = solver.newVar();
-                //Var newV2 = solver.newVar();
+                Var newV2 = solver.newVar();
                 solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(),
                                false, WireList[arrival_time-1][j]->getVar(), false);
-                //solver.addXorCNF(newV2, WireList[time_constraint][j]->getVar(),
-                  //             false, WireList[0][j]->getVar(), false);
+                solver.addXorCNF(newV2, WireList[small][j]->getVar(),
+                            false, WireList[0][j]->getVar(), false);
                 solver.assumeRelease();
                 solver.assumeProperty(InputList[0][i]->getVar(),false);
                 solver.assumeProperty(InputList[1][i]->getVar(),true);
@@ -107,7 +101,7 @@ void CirMgr::runsat(){
                 solver.assumeProperty(newV2, true);
 
                 bool isSat = solver.assumpSolve();
-              // if is satisfiable
+                //if is satisfiable
                 if(isSat ){
          //           changed[j-InputSize] = true;
                     cout<< "Start running DFS..."<<endl;
@@ -126,7 +120,7 @@ void CirMgr::runsat(){
         // 1->0
         cout<<"Input: "<<InputList[0][i]->getId()<<" from 1 to 0, start SAT..."<<endl;
         //see outs , solve SAT
-        arrival_time = time_constraint   ; //find the path >slack, one for t=0 ->-inf,
+        arrival_time = small   ; //find the path >slack, one for t=0 ->-inf,
 
 //        vector<bool> changed2(OutputList[0].size()); //to make sure it is the last time the output change
 
@@ -139,11 +133,11 @@ void CirMgr::runsat(){
            for(size_t j = InputSize;j<InputSize+OutputSize;++j){  //for each output
               cout<<"from "<<WireList[arrival_time][j]->getId()<<endl;   
               Var newV = solver.newVar();
-              //Var newV2 = solver.newVar();
+              Var newV2 = solver.newVar();
               solver.addXorCNF(newV, WireList[arrival_time][j]->getVar(), 
                                false, WireList[arrival_time-1][j]->getVar(), false);
-             // solver.addXorCNF(newV2, WireList[time_constraint][j]->getVar(),
-               //                false, WireList[0][j]->getVar(), false);
+              solver.addXorCNF(newV2, WireList[small][j]->getVar(),
+                               false, WireList[0][j]->getVar(), false);
               solver.assumeRelease();
               solver.assumeProperty(InputList[0][i]->getVar(),true);
               solver.assumeProperty(InputList[1][i]->getVar(),false);
