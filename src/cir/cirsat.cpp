@@ -166,7 +166,7 @@ void CirMgr::runsat(){
 cout<<countpath<<endl;
 }
 
-
+//*** changed_output means that we need to consider the XOR of changing output when DFS
 
 void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path, int input_num, bool RiseFall, Wire* change_ouput, int change_time){
     // check if it is satisfiable with previous layer
@@ -192,7 +192,7 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
 
     solver.assumeProperty(newV, true);
     solver.assumeProperty(newV1, true);
-    solver.assumeProperty(newV2, true);
+//    solver.assumeProperty(newV2, true);
 
     bool isSat = solver.assumpSolve();
     if(isSat){
@@ -209,14 +209,17 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
         }
         //if it is PI or bottom layer
         else if(time == 1){ 
-            if(o->getFin()!=0&&(o->getFin()->getFin(0)->getFin()==0||o->getFin()->getFin(1)->getFin()==0)){ 
+            if(o->getFin()!=0){
+             //   (o->getFin()->getFin(0)->getFin()==0||o->getFin()->getFin(1)->getFin()==0)
                 //if it is PI
                 //get input vector
                 //output to file
-
-               outputPath(solver, path,input_num,RiseFall);    
-               countpath++;
-               cout<<"find a path!"<<endl;
+               bool isTrue = lastCheck(solver, o, input_num);
+               if(isTrue){
+                  outputPath(solver, path,input_num,RiseFall);    
+                  countpath++;
+                  cout<<"find a path!"<<endl;
+               }
                /*cout<<"Input vector:"<<endl;
                for(size_t i=0;i<InputList[1].size();i++){
                    cout<<InputList[1][i]->getId()<<" : [ "<<solver.getValue(InputList[1][i]->getVar())<<" ]"<<endl;
@@ -236,6 +239,37 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
         }
     }
     
+}
+
+bool CirMgr::lastCheck(SatSolver& s, Wire* lastwire, int input_num){
+    Gate* lastGate = lastwire->getFin();
+    string type = lastGate->getType();
+    if(type == "NOT1"){
+        if(lastGate->getFin(0)==0) return true;
+        else return false;
+    }
+    else if(type == "NAND2"){
+        if(lastGate->getFin(0)==InputList[1][input_num]){
+            if(s.getValue(lastGate->getFin(1)->getVar())==0)return false;
+            else return true;
+        }
+        else{
+            if(s.getValue(lastGate->getFin(0)->getVar()) == 0) return false;
+            else return true;
+          }
+    }
+    else if (type == "NOR2"){
+
+        if(lastGate->getFin(0)==InputList[1][input_num]){
+            if(s.getValue(lastGate->getFin(1)->getVar())==0)return true;
+            else return false;
+        }
+        else{
+            if(s.getValue(lastGate->getFin(0)->getVar()) == 0) return true;
+            else return false;
+        }
+          
+    }
 }
 
 int PATH_NO = 0;
