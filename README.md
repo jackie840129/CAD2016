@@ -1,5 +1,10 @@
 # CAD2016
 problemD
 
-2016/5/22 update by Jackie:
-update 1.Makefile 2.inputfile 3.main
+HOW TO COMPILE:
+1.type make clean
+2.type make SLACK=x  :x is user-defined slack constriant
+
+HOW TO EXE:
+1.type ./cadJYu casex    
+ex)   ./ cadJYu case0

@@ -29,7 +29,7 @@ int assignWire(Wire* &wire, vector<Wire*> vec){
     for(size_t i=0 ; i<vec.size() ; ++i){
         if(wire->getId()==vec[i]->getId()){
             wire = vec[i];
-			cout << "found " << wire->getId() << " ";
+			//cout << "found " << wire->getId() << " ";
             return i;
         }
     }
@@ -164,7 +164,7 @@ void setVNum(Gate* gate, int out, int in0, int in1=-1){
 	}
 }
 void CirMgr::read_circuit(const string& file_name){    
-    cout << "now reading case1" << endl;
+    //cout << "now reading case1" << endl;
 	int count = 0;
     ifstream ifs(file_name.c_str());
     string line; // read every line in the file into "line"
@@ -389,7 +389,7 @@ void CirMgr::read_circuit(const string& file_name){
             }
         }
     }
-    cout << endl;
+   // cout << endl;
 }
 //Multi-Layer Construction
 //J-You class must change to multiple WireList & GateList
@@ -501,7 +501,7 @@ bool CirMgr::read_timeconstraint(const string& file_name){
             int end = line.find_first_of(" ",start);
             string t = line.substr(start, end-start);
             time_constraint = atoi(t.c_str());
-            cout << "Time Constraint = "<<time_constraint<<endl;
+            //cout << "Time Constraint = "<<time_constraint<<endl;
             break;
         }
     }
@@ -524,16 +524,16 @@ bool CirMgr::run_DFS(){
         vec.push_back(OutputList[0][i]);
         DFSList.push_back(vec);
     } 
-	cout << "layerSize = " << getLayerSize() << endl;
+//	cout << "layerSize = " << getLayerSize() << endl;
 	return true;
 
 }
 
 bool CirMgr::print_DFS(){
 
-    cout << "PRINT_DFS" << endl;
+    //cout << "PRINT_DFS" << endl;
     for(size_t i=0 ; i<DFSList.size() ; ++i){
-        cout << "Output" << i << " (" << OutputList[0][i]->getId() << ")" << endl;
+        //cout << "Output" << i << " (" << OutputList[0][i]->getId() << ")" << endl;
         for(size_t j=0 ; j<DFSList[i].size() ; ++j){
             if(j==0)
                 cout << DFSList[i][j]->getId();
