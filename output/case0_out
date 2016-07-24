@@ -130,7 +130,7 @@ Header { A True Path Set }
  {
    A[0]  =  f
    A[1]  =  0
-   B[0]  =  1
+   B[0]  =  0
    B[1]  =  1
  }
 
