@@ -26,9 +26,10 @@ int main(int argc, char**argv){
     //cirMgr->print_DFS();
     string file3 = "PD_case/"+casen+"/input/"+casen+".sdc";
     cirMgr->read_timeconstraint(file3);
-    //cirMgr->settime_constraint(31);
-    //cirMgr->setLayerSize(cirMgr->get_time_constraint());
-    //cout<<cirMgr->getLayerSize()<<endl;
+//    cirMgr->settime_constraint();
+ //   cirMgr->setLayerSize(cirMgr->get_time_constraint());
+    cout<<cirMgr->getLayerSize()<<endl;
+
     //cout << "Check assign slack in Makefile: "<<slack<<endl;
 	cirMgr->multi_Layer(cirMgr->getLayerSize());    
 

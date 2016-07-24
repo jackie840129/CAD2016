@@ -82,7 +82,7 @@ void CirMgr::runsat(){
         while(true){  //for time layer
             //cout<<" *******************LayerSize: "<<_layerSize<<endl;
             if(arrival_time < time_constraint - slack +1 )break; 
-         //  cerr<<"SAT from Layer "<<arrival_time<<endl;
+           cerr<<"SAT from Layer "<<arrival_time<<endl;
             
             size_t InputSize = InputList[0].size();
             size_t OutputSize = OutputList[0].size();
@@ -218,7 +218,9 @@ void CirMgr::DFS_sat(SatSolver& solver, Wire* o, size_t time, vector<Wire*> path
                //if(isTrue){
                   outputPath(solver, path,input_num,RiseFall);    
                   countpath++;
-                  //cout<<"find a path!"<<endl;
+                  //cout<<"find a path!"<<endl
+                  cout<<"find a path!"<<endl;
+
               // }
                /*cout<<"Input vector:"<<endl;
                for(size_t i=0;i<InputList[1].size();i++){
